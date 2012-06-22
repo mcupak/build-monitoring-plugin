@@ -5,15 +5,17 @@ import hudson.model.AbstractBuild;
 import hudson.model.listeners.RunListener;
 
 import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.util.Date;
 
 @Extension
 public class BuildListener extends RunListener<AbstractBuild> {
     
-    private final BuildMonitor monitor;
+    private final BuildUpdater updater;
     
-    public BuildListener() throws MalformedURLException {
-        this.monitor = new BuildMonitor();
+    public BuildListener() throws UnknownHostException {
+        // TODO extentension point
+        this.updater = new MongoUpdater();
     }
     
     public void onFinalized(AbstractBuild build) {
@@ -22,7 +24,7 @@ public class BuildListener extends RunListener<AbstractBuild> {
         Date scheduleTime = build.getTime();
         String buildOn = build.getBuiltOnStr();
         System.out.println("Build FINISHED: " + number + "\t" + name );
-        monitor.update(new BuildInfo(number, name, scheduleTime));
+        updater.update(new BuildInfo(number, name, scheduleTime));
     }
     
 
