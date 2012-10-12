@@ -4,7 +4,7 @@ import jenkins.model.Jenkins;
 import hudson.Extension;
 import hudson.model.PeriodicWork;
 
-@Extension
+/*@Extension
 public class StatsMonitor extends PeriodicWork {
 
     private static final int PERIOD_MINUTES = 15;
@@ -19,5 +19,5 @@ public class StatsMonitor extends PeriodicWork {
         statsInfo.setNumberOfProjetcs(j.getItems().size());
         statsInfo.setNumberOfSlaves(j.getNodes().size());
     }
-}
+}*/
 

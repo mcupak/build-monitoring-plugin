@@ -21,7 +21,7 @@ public class MongoUpdater implements BuildUpdater {
         BasicDBObject doc = new BasicDBObject();
         doc.put("number",build.getNumber());
         doc.put("name", build.getName());
-        doc.put("date", build.getDate());
+        //doc.put("date", build.getDate());
         coll.insert(doc);
     }
 

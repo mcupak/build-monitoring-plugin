@@ -10,41 +10,84 @@ import hudson.model.JDK;
 import hudson.model.ParametersAction;
 import hudson.model.listeners.RunListener;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
-import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.transaction.TransactionManager;
+
+import org.hibernate.ogm.util.impl.Log;
+import org.hibernate.ogm.util.impl.LoggerFactory;
 
 
 @Extension
 public class BuildListener extends RunListener<AbstractBuild> {
     
-    private final BuildDAO buildDAO;
-    
+	
+	private static final String JBOSS_TM_CLASS_NAME = "com.arjuna.ats.jta.TransactionManager";
+	private static final Log logger = LoggerFactory.make();
+	
+    //private final BuildDAO buildDAO;
+    private TransactionManager tm;
+    private EntityManagerFactory emf;
+	
     public BuildListener() throws Exception {
-        this.buildDAO = DAOFactory.getDAOFactory().getBuildDAO();
+    	
+    	System.out.println("KONSTRUKTOR - start");
+    	
+        //this.buildDAO = DAOFactory.getDAOFactory().getBuildDAO();
+    	tm = getTransactionManager();
+
+		//build the EntityManagerFactory as you would build in in Hibernate Core
+		emf = Persistence.createEntityManagerFactory( "ogm-jpa-tutorial" );
+		
+		for(String key : emf.getProperties().keySet()) {
+			System.out.println("KEY:VALUE: " + key + "\t" + emf.getProperties().get(key));
+		}
+		
+		System.out.println("KONSTRUKTOR - end");
     }
     
     public void onStarted(AbstractBuild build, TaskListener listener) {
-        BuildInfo buildInfo = new BuildInfo(build.number, build.getParent().getDisplayName());
-        buildInfo.setClassName(build.getParent().getClass().getName());
-        buildInfo.setStartedTime(build.getTime());
-        buildInfo.setJdkName(getJdkName(build));
-        buildInfo.setLabel(((AbstractProject)build.getParent()).getAssignedLabelString());
-        buildInfo.setBuildOn(getBuildOn(build));
-        buildInfo.setTriggerCauses(build.getCauses());
-        buildInfo.setParameters(getParameters(build));
-        buildDAO.updateOnStarted(buildInfo);
+		try {
+			System.out.println("STARTED - start");
+			
+			tm.begin();
+			logger.infof( "About to store dog and breed" );
+			EntityManager em = emf.createEntityManager();
+			
+			BuildInfo buildInfo = new BuildInfo(build.number, build.getParent().getDisplayName());
+			buildInfo.setClassName(build.getParent().getClass().getName());
+			buildInfo.setStartedTime(build.getTime());
+			buildInfo.setJdkName(getJdkName(build));
+			buildInfo.setLabel(((AbstractProject)build.getParent()).getAssignedLabelString());
+			buildInfo.setBuildOn(getBuildOn(build));
+			buildInfo.setTriggerCauses(build.getCauses());
+			buildInfo.setParameters(getParameters(build));
+			//buildDAO.updateOnStarted(buildInfo);
+			
+			em.persist( buildInfo );
+			em.flush();
+			em.close();
+			tm.commit();
+			
+			System.out.println("STARTED - end");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
     }
     
     public void onFinalized(AbstractBuild build) {
         BuildInfo buildInfo = new BuildInfo(build.number,build.getParent().getDisplayName());
         buildInfo.setFinishedTime(new Date(System.currentTimeMillis()));
         buildInfo.setResult(build.getResult());
-        buildDAO.updateOnFinalized(buildInfo);
+        //buildDAO.updateOnFinalized(buildInfo);
     }
     
     
@@ -77,5 +120,22 @@ public class BuildListener extends RunListener<AbstractBuild> {
         }
         return paramMap;
     }
+    
+	public static TransactionManager getTransactionManager() {
+		try {
+			Class<?> tmClass = BuildListener.class.getClassLoader().loadClass( JBOSS_TM_CLASS_NAME );
+			return (TransactionManager) tmClass.getMethod( "transactionManager" ).invoke( null );
+		} catch ( ClassNotFoundException e ) {
+			e.printStackTrace();
+		} catch ( InvocationTargetException e ) {
+			e.printStackTrace();
+		} catch ( NoSuchMethodException e ) {
+			e.printStackTrace();
+		} catch ( IllegalAccessException e ) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 }

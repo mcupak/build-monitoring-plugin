@@ -1,6 +1,5 @@
 package org.jenkinsci.plugins.buildanalysis;
 
-import hudson.model.ParameterValue;
 import hudson.model.Result;
 import hudson.model.Cause;
 
@@ -8,8 +7,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
 public class BuildInfo {
     
+	@Id @GeneratedValue(generator = "uuid")
+	@GenericGenerator(name="uuid", strategy="uuid2")
+	private String id;
     private int number;
     private String name;
     private String className;
@@ -35,6 +44,9 @@ public class BuildInfo {
         this.startedTime = startedTime;
     }
     
+    
+    public String getId() { return id; }
+	public void setId(String id) { this.id = id; }
     
     public int getNumber() {
         return number;

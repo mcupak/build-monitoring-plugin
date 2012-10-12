@@ -3,7 +3,7 @@ package org.jenkinsci.plugins.buildanalysis;
 import hudson.Extension;
 import hudson.model.PeriodicWork;
 
-@Extension
+/*@Extension
 public class QueueMonitor extends PeriodicWork {
 
     private static final int PERIOD_MINUTES = 5;
@@ -16,3 +16,4 @@ public class QueueMonitor extends PeriodicWork {
         
     }
 }
+*/

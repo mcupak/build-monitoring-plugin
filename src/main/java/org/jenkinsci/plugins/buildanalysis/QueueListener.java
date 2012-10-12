@@ -12,7 +12,7 @@ import java.util.List;
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 
-@Extension
+/*@Extension
 public class QueueListener extends QueueDecisionHandler {
 
     private final BuildDAO buildDAO;
@@ -28,3 +28,4 @@ public class QueueListener extends QueueDecisionHandler {
         return true;
     }
 }
+*/
