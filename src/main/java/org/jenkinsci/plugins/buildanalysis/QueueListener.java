@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
+import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 
 @Extension
 public class QueueListener extends QueueDecisionHandler {

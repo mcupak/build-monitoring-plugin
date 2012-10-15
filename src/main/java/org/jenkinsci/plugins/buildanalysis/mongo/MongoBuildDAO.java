@@ -7,8 +7,8 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.jenkinsci.plugins.buildanalysis.BuildInfo;
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
+import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;

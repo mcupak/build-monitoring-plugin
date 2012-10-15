@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.buildanalysis.dao;
 
-import org.jenkinsci.plugins.buildanalysis.QueueInfo;
+import org.jenkinsci.plugins.buildanalysis.model.QueueInfo;
 
 public interface QueueDAO {
 

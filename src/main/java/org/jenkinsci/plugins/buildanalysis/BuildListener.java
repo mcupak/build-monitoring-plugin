@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
+import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 
 
 @Extension

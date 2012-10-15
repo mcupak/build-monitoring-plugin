@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.buildanalysis.dao;
 
-import org.jenkinsci.plugins.buildanalysis.BuildInfo;
+import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 
 public interface BuildDAO {
 

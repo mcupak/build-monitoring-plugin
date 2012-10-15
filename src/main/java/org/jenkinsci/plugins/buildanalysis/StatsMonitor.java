@@ -1,5 +1,7 @@
 package org.jenkinsci.plugins.buildanalysis;
 
+import org.jenkinsci.plugins.buildanalysis.model.StatsInfo;
+
 import jenkins.model.Jenkins;
 import hudson.Extension;
 import hudson.model.PeriodicWork;
