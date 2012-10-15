@@ -15,8 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import jenkins.model.Jenkins;
+
+import org.jenkinsci.plugins.buildanalysis.BuildMonitoring.BuildMonitoringDescriptor;
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
+import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 
 
@@ -26,7 +30,8 @@ public class BuildListener extends RunListener<AbstractBuild> {
     private final BuildDAO buildDAO;
     
     public BuildListener() throws Exception {
-        this.buildDAO = DAOFactory.getDAOFactory().getBuildDAO();
+    	DbConfig dbConfig = ((BuildMonitoringDescriptor)Jenkins.getInstance().getDescriptor(BuildMonitoring.class)).getDbConfig();
+        this.buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO("builds");
     }
     
     public void onStarted(AbstractBuild build, TaskListener listener) {

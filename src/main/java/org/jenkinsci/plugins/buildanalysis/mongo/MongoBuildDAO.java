@@ -11,10 +11,7 @@ import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.Mongo;
-import com.mongodb.WriteResult;
 
 public class MongoBuildDAO implements BuildDAO {
 
@@ -33,10 +30,8 @@ public class MongoBuildDAO implements BuildDAO {
     private final String KEY_TRIGGER_CAUSES = "trigger_causes";
     private final String KEY_PARAMETERS = "parameters";
     
-    public MongoBuildDAO() throws UnknownHostException {
-        Mongo m = new Mongo("localhost");
-        DB db = m.getDB("jenkins");
-        coll = db.getCollection("builds");
+    public MongoBuildDAO(DBCollection coll) throws UnknownHostException {
+    	this.coll = coll;
     }
 
     public void create(BuildInfo build) {
