@@ -10,19 +10,19 @@ import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
-public class BuildMonitoring implements Describable<BuildMonitoring> {
+public class BuildAnalysis implements Describable<BuildAnalysis> {
 	
-	public BuildMonitoringDescriptor getDescriptor() {
-		return (BuildMonitoringDescriptor)Jenkins.getInstance().getDescriptor(BuildMonitoring.class);
+	public BuildAnalysisDescriptor getDescriptor() {
+		return (BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class);
 	}
 	
 	@Extension
-	public static class BuildMonitoringDescriptor extends Descriptor<BuildMonitoring> {
+	public static class BuildAnalysisDescriptor extends Descriptor<BuildAnalysis> {
 	
 		private DbConfig dbConfig;
 		
-		public BuildMonitoringDescriptor() {
-			super(BuildMonitoring.class);
+		public BuildAnalysisDescriptor() {
+			super(BuildAnalysis.class);
 			load();
 		}
 		
