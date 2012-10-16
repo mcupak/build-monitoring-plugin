@@ -16,10 +16,11 @@ import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
+import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 
 @Extension
 public class QueueListener extends QueueDecisionHandler {
-
+	
     private final BuildDAO buildDAO;
     
     public QueueListener() throws Exception {
@@ -28,7 +29,8 @@ public class QueueListener extends QueueDecisionHandler {
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {
-        BuildInfo buildInfo = new BuildInfo(((AbstractProject<?,?>)p).getNextBuildNumber(), p.getDisplayName());
+    	System.out.println("Queue listner called");
+        BuildInfo buildInfo = new BuildInfo(BuildUtils.getProjectName((AbstractProject<?,?>)p), ((AbstractProject<?,?>)p).getNextBuildNumber());
         buildInfo.setScheduledTime(new Date(System.currentTimeMillis()));
         buildDAO.create(buildInfo);
         return true;

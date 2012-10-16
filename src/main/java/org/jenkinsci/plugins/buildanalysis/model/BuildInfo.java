@@ -22,9 +22,9 @@ public class BuildInfo {
     private List<Cause> triggerCauses;
     private Map<String,String> parameters;
     
-    public BuildInfo(int number, String name){
-        this.number = number;
+    public BuildInfo(String name, int number){
         this.name = name;
+        this.number = number;
     }
     
     public BuildInfo(int number, String name, Date scheduledTime, Date startedTime){
