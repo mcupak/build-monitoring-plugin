@@ -1,14 +1,10 @@
 package org.jenkinsci.plugins.buildanalysis.mongo;
 
-import hudson.model.Result;
-import hudson.model.Cause;
-
 import java.net.UnknownHostException;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
+import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -52,7 +48,7 @@ public class MongoBuildDAO implements BuildDAO {
         doc.put(KEY_LABEL, build.getLabel());
         doc.put(KEY_STARTED_TIME, build.getStartedTime());
         doc.put(KEY_BUILD_ON, build.getBuildOn());
-        doc.put(KEY_TRIGGER_CAUSES, convertCauses(build.getTriggerCauses()));
+        doc.put(KEY_TRIGGER_CAUSES, BuildUtils.convertCauses(build.getTriggerCauses()));
         doc.put(KEY_PARAMETERS, build.getParameters());
         coll.update(old, new BasicDBObject().append("$set", doc), true, false);
     }
@@ -63,23 +59,8 @@ public class MongoBuildDAO implements BuildDAO {
         old.put(KEY_NAME, build.getName());
         BasicDBObject doc = new BasicDBObject();
         doc.put(KEY_FINISHED_TIME, build.getFinishedTime());
-        doc.put(KEY_RESULT, convertResult(build.getResult()));
+        doc.put(KEY_RESULT, BuildUtils.convertResult(build.getResult()));
         coll.update(old, new BasicDBObject().append("$set", doc), true, false);
-    }
-
-    
-    private String convertResult(Result result) {
-        return result == null ? null : result.toString();
-    }
-    
-    private List<String> convertCauses(List<Cause> causes) {
-        if(causes == null)
-            return null;
-        List<String> causesStr = new LinkedList<String>();
-        for(Cause cause: causes){
-            causesStr.add(cause.getShortDescription());
-        }
-        return causesStr;
     }
        
 }

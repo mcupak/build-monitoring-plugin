@@ -4,11 +4,15 @@ import hudson.EnvVars;
 import hudson.matrix.MatrixConfiguration;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Cause;
 import hudson.model.JDK;
 import hudson.model.ParameterValue;
 import hudson.model.ParametersAction;
+import hudson.model.Result;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -55,6 +59,20 @@ public class BuildUtils {
             
         }
         return paramMap;
+    }
+    
+    public static String convertResult(Result result) {
+        return result == null ? null : result.toString();
+    }
+    
+    public static List<String> convertCauses(List<Cause> causes) {
+        if(causes == null)
+            return null;
+        List<String> causesStr = new LinkedList<String>();
+        for(Cause cause: causes){
+            causesStr.add(cause.getShortDescription());
+        }
+        return causesStr;
     }
 
 }
