@@ -24,7 +24,7 @@ public class QueueListener extends QueueDecisionHandler {
     
     public QueueListener() throws Exception {
     	DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        this.buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO("");
+        this.buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {

@@ -31,7 +31,7 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> {
     
     public BuildListener() throws Exception {
     	DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        this.buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO("builds");
+        this.buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
     }
     
     public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {

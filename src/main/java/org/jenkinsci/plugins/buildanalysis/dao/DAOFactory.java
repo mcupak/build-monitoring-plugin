@@ -12,5 +12,6 @@ public abstract class DAOFactory {
         return new MongoDAOFactory(dbConfig);
     }
     
+    public abstract BuildDAO getBuildDAO() throws Exception;
     public abstract BuildDAO getBuildDAO(String collectionName) throws Exception;
 }

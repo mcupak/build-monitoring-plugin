@@ -12,6 +12,8 @@ import com.mongodb.Mongo;
 
 public class MongoDAOFactory extends DAOFactory {
 
+	private static final String BUILDS_COLLECTION_NAME = "builds";
+	
 	private final Mongo mongo;
     private final DB db;
 	
@@ -19,6 +21,11 @@ public class MongoDAOFactory extends DAOFactory {
 		this.mongo = new Mongo(dbConfig.getHost());
 		this.db = mongo.getDB(dbConfig.getDbName());
 	}
+	
+	public BuildDAO getBuildDAO() throws UnknownHostException {
+        DBCollection coll = db.getCollection(BUILDS_COLLECTION_NAME);
+        return new MongoBuildDAO(coll);
+    }
 	
     public BuildDAO getBuildDAO(String collectionName) throws UnknownHostException {
         DBCollection coll = db.getCollection(collectionName);
