@@ -16,7 +16,6 @@ public class MongoDAOFactory extends DAOFactory {
     private final DB db;
 	
 	public MongoDAOFactory(DbConfig dbConfig) throws UnknownHostException {
-		super(dbConfig);
 		this.mongo = new Mongo(dbConfig.getHost());
 		this.db = mongo.getDB(dbConfig.getDbName());
 	}
