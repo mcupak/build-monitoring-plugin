@@ -43,10 +43,14 @@ public class BuildAnalysis implements Describable<BuildAnalysis> {
 		}
 		
 		public String getHost() {
+			if(dbConfig == null)
+				return "";
 			return dbConfig.getHost();
 		}
 		
 		public String getDbName() {
+			if(dbConfig == null)
+				return "";
 			return dbConfig.getDbName();
 		}
 		
