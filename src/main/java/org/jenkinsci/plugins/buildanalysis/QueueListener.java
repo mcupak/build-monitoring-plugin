@@ -28,7 +28,7 @@ public class QueueListener extends QueueDecisionHandler {
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {
-        BuildInfo buildInfo = new BuildInfo(((AbstractProject)p).getNextBuildNumber(), p.getDisplayName());
+        BuildInfo buildInfo = new BuildInfo(((AbstractProject<?,?>)p).getNextBuildNumber(), p.getDisplayName());
         buildInfo.setScheduledTime(new Date(System.currentTimeMillis()));
         buildDAO.create(buildInfo);
         return true;

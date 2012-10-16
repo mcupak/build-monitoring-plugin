@@ -1,6 +1,5 @@
 package org.jenkinsci.plugins.buildanalysis.model;
 
-import hudson.model.ParameterValue;
 import hudson.model.Result;
 import hudson.model.Cause;
 

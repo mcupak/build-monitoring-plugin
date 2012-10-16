@@ -25,7 +25,7 @@ import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 
 
 @Extension
-public class BuildListener extends RunListener<AbstractBuild> {
+public class BuildListener extends RunListener<AbstractBuild<?,?>> {
     
     private final BuildDAO buildDAO;
     
@@ -34,19 +34,19 @@ public class BuildListener extends RunListener<AbstractBuild> {
         this.buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO("builds");
     }
     
-    public void onStarted(AbstractBuild build, TaskListener listener) {
+    public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {
         BuildInfo buildInfo = new BuildInfo(build.number, build.getParent().getDisplayName());
         buildInfo.setClassName(build.getParent().getClass().getName());
         buildInfo.setStartedTime(build.getTime());
         buildInfo.setJdkName(getJdkName(build));
-        buildInfo.setLabel(((AbstractProject)build.getParent()).getAssignedLabelString());
+        buildInfo.setLabel(((AbstractProject<?,?>)build.getParent()).getAssignedLabelString());
         buildInfo.setBuildOn(getBuildOn(build));
         buildInfo.setTriggerCauses(build.getCauses());
         buildInfo.setParameters(getParameters(build));
         buildDAO.updateOnStarted(buildInfo);
     }
     
-    public void onFinalized(AbstractBuild build) {
+    public void onFinalized(AbstractBuild<?,?> build) {
         BuildInfo buildInfo = new BuildInfo(build.number,build.getParent().getDisplayName());
         buildInfo.setFinishedTime(new Date(System.currentTimeMillis()));
         buildInfo.setResult(build.getResult());
@@ -54,20 +54,20 @@ public class BuildListener extends RunListener<AbstractBuild> {
     }
     
     
-    private String getJdkName(AbstractBuild build) {
-        JDK jdk = ((AbstractProject)build.getParent()).getJDK();
+    private String getJdkName(AbstractBuild<?,?> build) {
+        JDK jdk = ((AbstractProject<?,?>)build.getParent()).getJDK();
         return jdk != null ? jdk.getName() : null;
         
     }
     
-    private String getBuildOn(AbstractBuild build) {
+    private String getBuildOn(AbstractBuild<?,?> build) {
         String buildOn = build.getBuiltOnStr();
         if(buildOn == null || buildOn.equals(""))
             buildOn = "master";
         return buildOn;
     }
     
-    private Map<String,String> getParameters(AbstractBuild build) {
+    private Map<String,String> getParameters(AbstractBuild<?,?> build) {
         ParametersAction paramAction = build.getAction(hudson.model.ParametersAction.class);
         if(paramAction == null || paramAction.getParameters() == null)
             return null;

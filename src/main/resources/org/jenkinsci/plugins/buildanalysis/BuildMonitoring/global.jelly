@@ -1,7 +1,8 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
 	<f:section title="Build monitoring">
-		<f:entry title="DB config" field="dbConfig" description="Database configuration">
-			<st:include page="config.jelly" class="org.jenkinsci.plugins.buildanalysis.dao.DbConfig" />
-		</f:entry>
+		<!-- f:entry title="DB config" field="dbConfig" description="Database configuration" -->
+				<!-- j:set var="instance" value="${instance.dbConfig}" / -->
+				<st:include page="config.jelly" class="org.jenkinsci.plugins.buildanalysis.dao.DbConfig" />
+		<!-- /f:entry -->
 	</f:section>
 </j:jelly>

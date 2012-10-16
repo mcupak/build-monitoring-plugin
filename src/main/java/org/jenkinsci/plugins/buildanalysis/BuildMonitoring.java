@@ -7,6 +7,7 @@ import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
+import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
 public class BuildMonitoring implements Describable<BuildMonitoring> {
@@ -20,15 +21,33 @@ public class BuildMonitoring implements Describable<BuildMonitoring> {
 	
 		private DbConfig dbConfig;
 		
+		public BuildMonitoringDescriptor() {
+			super(BuildMonitoring.class);
+			load();
+		}
+		
 		@Override
 		public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
-			dbConfig = req.bindJSON(DbConfig.class, json.getJSONObject("dbConfig"));
+			//TODO - smarter databinding, so far I wan't able to force jelly to incelude dbConfig JSON
+			//System.out.println("JSON: " + json.toString());
+			//dbConfig = req.bindJSON(DbConfig.class, json.getJSONObject("dbConfig"));
+			String host = json.getString("host");
+			String dbName = json.getString("dbName");
+			dbConfig = new DbConfig(host, dbName);
 			save();
 			return super.configure(req, json);
 		}
 		
 		public DbConfig getDbConfig() {
 			return dbConfig;
+		}
+		
+		public String getHost() {
+			return dbConfig.getHost();
+		}
+		
+		public String getDbName() {
+			return dbConfig.getDbName();
 		}
 		
 		public String getDisplayName() {
