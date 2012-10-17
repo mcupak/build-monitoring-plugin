@@ -1,6 +1,12 @@
 package org.jenkinsci.plugins.buildanalysis.mongo;
 
+import hudson.util.IOUtils;
+
+import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
@@ -8,6 +14,10 @@ import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MapReduceCommand;
+import com.mongodb.MapReduceOutput;
 
 public class MongoBuildDAO implements BuildDAO {
 
@@ -62,5 +72,66 @@ public class MongoBuildDAO implements BuildDAO {
         doc.put(KEY_RESULT, BuildUtils.convertResult(build.getResult()));
         coll.update(old, new BasicDBObject().append("$set", doc), true, false);
     }
-       
+    
+    public void getBuilds(String jobName) {
+    	BasicDBObject query = new BasicDBObject();
+    	query.put(KEY_NAME, jobName);
+    	List<DBObject> results = doQuery(query);
+    	
+    	for(DBObject o : results) {
+    		System.out.println(o);
+    	}
+    	
+    	System.out.println("MAP_REDUCE:");
+    	MapReduceOutput mr = mapReduce();
+    	for(DBObject o : mr.results()) {
+    		System.out.println(o);
+    	}
+    }
+    
+    public void getBuild(String jobName, int number) {
+    	BasicDBObject query = new BasicDBObject();
+    	query.put(KEY_NAME, jobName);
+    	query.put(KEY_NUMBER, number);
+    	List<DBObject> results = doQuery(query);
+    	
+    	for(DBObject o : results) {
+    		System.out.println(o);
+    	}
+    }
+    
+    
+    /**
+     * 
+     * @param query to be executed
+     * @return {@link List} of search results, can be empty but never null
+     */
+    private List<DBObject> doQuery(BasicDBObject query) {
+    	List<DBObject> results = new ArrayList<DBObject>();
+    	DBCursor cursor = coll.find(query);
+        try {
+            while(cursor.hasNext()) {
+                results.add(cursor.next());
+            }
+        } finally {
+            cursor.close();
+        }
+        return results;
+    }
+    
+    private MapReduceOutput mapReduce() {
+    	String map = "";
+    	String reduce = "";
+    	ClassLoader classLoader = getClass().getClassLoader();
+    	try {
+    		map = IOUtils.toString(classLoader.getResourceAsStream("js/MapReduce/mapTest.js"));
+    		reduce = IOUtils.toString(classLoader.getResourceAsStream("js/MapReduce/reduceTest.js"));
+    	} catch(IOException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	MapReduceOutput out = coll.mapReduce(map, reduce, null, MapReduceCommand.OutputType.INLINE, null);
+    	return out;
+    }
+    
 }
