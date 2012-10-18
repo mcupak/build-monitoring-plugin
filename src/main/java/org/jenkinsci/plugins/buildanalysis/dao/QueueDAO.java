@@ -5,5 +5,6 @@ import org.jenkinsci.plugins.buildanalysis.model.QueueInfo;
 public interface QueueDAO {
 
     public void create(QueueInfo queueInfo);
+    public void update(QueueInfo queueInfo);
     
 }

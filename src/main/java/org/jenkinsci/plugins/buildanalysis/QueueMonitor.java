@@ -12,6 +12,10 @@ import java.util.List;
 
 import jenkins.model.Jenkins;
 
+import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
+import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
+import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
+import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
 import org.jenkinsci.plugins.buildanalysis.model.QueueInfo;
 import org.jenkinsci.plugins.buildanalysis.model.QueueItemInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
@@ -21,6 +25,13 @@ public class QueueMonitor extends PeriodicWork {
 
 	//TODO make it configurable via Aperiodic work?
     private static final int PERIOD_MINUTES = 1;
+    
+    private final QueueDAO queueDAO;
+    
+    public QueueMonitor() throws Exception {
+    	DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+        this.queueDAO = DAOFactory.getDAOFactory(dbConfig).getQueueDAO();
+    }
     
     public long getRecurrencePeriod() {
         return PERIOD_MINUTES * MIN;

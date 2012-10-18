@@ -12,6 +12,10 @@ public abstract class DAOFactory {
         return new MongoDAOFactory(dbConfig);
     }
     
+    //TODO don't throw general exception, but concrete one
     public abstract BuildDAO getBuildDAO() throws Exception;
     public abstract BuildDAO getBuildDAO(String collectionName) throws Exception;
+    
+    public abstract QueueDAO getQueueDAO() throws Exception;
+    public abstract QueueDAO getQueueDAO(String collectionName) throws Exception;
 }
