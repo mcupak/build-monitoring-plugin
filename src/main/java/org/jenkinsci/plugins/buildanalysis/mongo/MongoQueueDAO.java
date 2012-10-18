@@ -1,6 +1,5 @@
 package org.jenkinsci.plugins.buildanalysis.mongo;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class MongoQueueDAO implements QueueDAO {
 	private final String KEY_WAITING_SIZE = "waitingSize";
 	private final String KEY_QUEUE_LIST = "queueList";
 	
-	public MongoQueueDAO(DBCollection coll) throws UnknownHostException {
+	public MongoQueueDAO(DBCollection coll) {
     	this.coll = coll;
     }
 	
