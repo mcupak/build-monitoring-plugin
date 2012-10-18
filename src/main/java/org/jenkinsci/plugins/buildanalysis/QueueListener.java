@@ -29,7 +29,6 @@ public class QueueListener extends QueueDecisionHandler {
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {
-    	System.out.println("Queue listner called");
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getProjectName((AbstractProject<?,?>)p), ((AbstractProject<?,?>)p).getNextBuildNumber());
         buildInfo.setScheduledTime(new Date(System.currentTimeMillis()));
         buildDAO.create(buildInfo);

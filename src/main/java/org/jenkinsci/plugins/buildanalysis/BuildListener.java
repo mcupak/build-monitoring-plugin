@@ -17,7 +17,6 @@ import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 
-
 @Extension
 public class BuildListener extends RunListener<AbstractBuild<?,?>> {
 	
