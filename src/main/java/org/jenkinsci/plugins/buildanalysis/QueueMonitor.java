@@ -41,7 +41,7 @@ public class QueueMonitor extends PeriodicWork {
     protected void doRun() throws Exception {
     	QueueInfo qi = new QueueInfo(new Date(System.currentTimeMillis()));
     	Queue q = Jenkins.getInstance().getQueue();
-    	qi.setQueuesSize(q.getItems().length);
+    	qi.setQueueSize(q.getItems().length);
     	qi.setBuildableSize(q.getBuildableItems().size());
     	qi.setPendingSize(q.getPendingItems().size());
     	//TODO blockedProjects
@@ -56,14 +56,15 @@ public class QueueMonitor extends PeriodicWork {
     		qItem.setNumber(((AbstractProject<?,?>)t).getNextBuildNumber());
     		qItem.setClassName(((AbstractProject<?,?>)t).getClass().getName());
     		qItem.setParams(item.getParams());
-    		qItem.setBlockageCauses(item.getCauseOfBlockage());
+    		qItem.setBlockageCause(item.getCauseOfBlockage());
     		qItem.setConcurentBuild(t.isConcurrentBuild());
     		qItem.setBuildable(item.isBuildable());
     		qItem.setBlocked(item.isBlocked());
     		qItem.setStucked(item.isStuck());
+    		qItems.add(qItem);
     	}
     	qi.setQueueList(qItems);
-    	
+
     	queueDAO.create(qi); //TODO think if better to store new record every time or do some update or store e.g. some delta 
     }
 }

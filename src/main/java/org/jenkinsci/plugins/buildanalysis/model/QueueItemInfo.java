@@ -9,7 +9,7 @@ public class QueueItemInfo {
     private String name;
     private String className;
     private String params;
-    private CauseOfBlockage blockageCauses;
+    private CauseOfBlockage blockageCause;
     private boolean isConcurentBuild;
     private boolean isBuildable;
     private boolean isBlocked;
@@ -55,12 +55,12 @@ public class QueueItemInfo {
 		this.params = params;
 	}
 	
-	public CauseOfBlockage getBlockageCauses() {
-		return blockageCauses;
+	public CauseOfBlockage getBlockageCause() {
+		return blockageCause;
 	}
 	
-	public void setBlockageCauses(CauseOfBlockage blockageCauses) {
-		this.blockageCauses = blockageCauses;
+	public void setBlockageCause(CauseOfBlockage blockageCause) {
+		this.blockageCause = blockageCause;
 	}
 	
 	public boolean isConcurentBuild() {

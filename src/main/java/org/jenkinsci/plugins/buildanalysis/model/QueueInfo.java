@@ -6,7 +6,7 @@ import java.util.List;
 public class QueueInfo {
 	
 	private final Date timestamp;
-	private int queuesSize;
+	private int queueSize;
 	private int buildableSize;
 	private int pendingSize;
 	private int blockedSize;
@@ -17,12 +17,12 @@ public class QueueInfo {
 		this.timestamp = timestamp;
 	}
 	
-	public int getQueuesSize() {
-		return queuesSize;
+	public int getQueueSize() {
+		return queueSize;
 	}
 	
-	public void setQueuesSize(int queuesSize) {
-		this.queuesSize = queuesSize;
+	public void setQueueSize(int queueSize) {
+		this.queueSize = queueSize;
 	}
 	
 	public int getBuildableSize() {
