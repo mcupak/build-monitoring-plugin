@@ -9,7 +9,6 @@ import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
 import org.jenkinsci.plugins.buildanalysis.model.QueueInfo;
 import org.jenkinsci.plugins.buildanalysis.model.QueueItemInfo;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 
