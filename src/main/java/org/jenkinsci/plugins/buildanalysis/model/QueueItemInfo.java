@@ -4,7 +4,7 @@ import hudson.model.queue.CauseOfBlockage;
 
 public class QueueItemInfo {
 
-	private int id;
+    private int id;
     private int number;
     private String name;
     private String className;
