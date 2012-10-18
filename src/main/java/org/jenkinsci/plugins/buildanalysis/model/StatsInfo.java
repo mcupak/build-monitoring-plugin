@@ -6,7 +6,6 @@ public class StatsInfo {
     private int numberOfBuilds;
     private int numberOfSlaves;
     private int numberOfOfflineSlaves;
-    private int numberOfExecutors;
     
     
     public int getNumberOfProjetcs() {
@@ -33,7 +32,5 @@ public class StatsInfo {
     public void setNumberOfOfflineSlaves(int numberOfOfflineSlaves) {
         this.numberOfOfflineSlaves = numberOfOfflineSlaves;
     }
-    
-    
 
 }
