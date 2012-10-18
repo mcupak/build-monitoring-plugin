@@ -64,6 +64,6 @@ public class QueueMonitor extends PeriodicWork {
     	}
     	qi.setQueueList(qItems);
     	
-    	queueDAO.create(qi);
+    	queueDAO.create(qi); //TODO think if better to store new record every time or do some update or store e.g. some delta 
     }
 }
