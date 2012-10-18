@@ -1,15 +1,21 @@
 package org.jenkinsci.plugins.buildanalysis.model;
 
+import java.util.Date;
 import java.util.List;
 
 public class QueueInfo {
 	
+	private final Date timestamp;
 	private int queuesSize;
 	private int buildableSize;
 	private int pendingSize;
 	private int blockedSize;
 	private int waitingSize;
 	private List<QueueItemInfo> queueList;
+	
+	public QueueInfo(Date timestamp) {
+		this.timestamp = timestamp;
+	}
 	
 	public int getQueuesSize() {
 		return queuesSize;
@@ -59,4 +65,8 @@ public class QueueInfo {
 		this.queueList = queueList;
 	}
 
+	public Date getTimestamp() {
+		return timestamp;
+	}
+	
 }

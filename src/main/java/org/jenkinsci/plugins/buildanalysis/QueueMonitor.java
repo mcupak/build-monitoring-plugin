@@ -8,6 +8,7 @@ import hudson.model.Queue.Item;
 import hudson.model.Queue.Task;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jenkins.model.Jenkins;
@@ -38,7 +39,7 @@ public class QueueMonitor extends PeriodicWork {
     }
     
     protected void doRun() throws Exception {
-    	QueueInfo qi = new QueueInfo();
+    	QueueInfo qi = new QueueInfo(new Date(System.currentTimeMillis()));
     	Queue q = Jenkins.getInstance().getQueue();
     	qi.setQueuesSize(q.getItems().length);
     	qi.setBuildableSize(q.getBuildableItems().size());
@@ -62,5 +63,7 @@ public class QueueMonitor extends PeriodicWork {
     		qItem.setStucked(item.isStuck());
     	}
     	qi.setQueueList(qItems);
+    	
+    	queueDAO.create(qi);
     }
 }
