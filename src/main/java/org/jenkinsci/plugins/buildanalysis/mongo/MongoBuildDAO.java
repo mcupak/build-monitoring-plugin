@@ -3,7 +3,6 @@ package org.jenkinsci.plugins.buildanalysis.mongo;
 import hudson.util.IOUtils;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class MongoBuildDAO implements BuildDAO {
     private final String KEY_TRIGGER_CAUSES = "trigger_causes";
     private final String KEY_PARAMETERS = "parameters";
     
-    public MongoBuildDAO(DBCollection coll) throws UnknownHostException {
+    public MongoBuildDAO(DBCollection coll) {
     	this.coll = coll;
     }
 
