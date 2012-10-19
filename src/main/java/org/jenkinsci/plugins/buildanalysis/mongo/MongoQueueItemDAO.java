@@ -7,16 +7,16 @@ import com.mongodb.BasicDBObject;
 
 public class MongoQueueItemDAO {
 	
-	private final String KEY_ID = "id";
-	private final String KEY_NUMBER = "number";
-	private final String KEY_NAME = "name";
-	private final String KEY_CLASS_NAME = "className";
-	private final String KEY_PARAMS = "params";
-	private final String KEY_BLOCKAGE_CAUSES = "blockageCauses";
-	private final String KEY_IS_CONCURENT_BUILD = "isConcurentBuild";
-	private final String KEY_IS_BUILDABLE = "isBuildable";
-	private final String KEY_IS_BLOCKED = "isBlocked";
-	private final String KEY_iS_STUCKED = "isStucked";
+	private static final String KEY_ID = "id";
+	private static final String KEY_NUMBER = "number";
+	private static final String KEY_NAME = "name";
+	private static final String KEY_CLASS_NAME = "className";
+	private static final String KEY_PARAMS = "params";
+	private static final String KEY_BLOCKAGE_CAUSES = "blockageCauses";
+	private static final String KEY_IS_CONCURENT_BUILD = "isConcurentBuild";
+	private static final String KEY_IS_BUILDABLE = "isBuildable";
+	private static final String KEY_IS_BLOCKED = "isBlocked";
+	private static final String KEY_iS_STUCKED = "isStucked";
 	
 	public MongoQueueItemDAO() {
     }

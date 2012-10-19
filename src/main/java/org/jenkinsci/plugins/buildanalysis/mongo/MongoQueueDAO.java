@@ -15,13 +15,13 @@ public class MongoQueueDAO implements QueueDAO {
     
 	private final DBCollection coll;
 	
-	private final String KEY_TIMESTAMP = "timestamp";
-	private final String KEY_QUEUE_SIZE = "queueSize";
-	private final String KEY_BUILDABLE_SIZE = "buildableSize";
-	private final String KEY_PENDING_SIZE = "pendingSize";
-	private final String KEY_BLOCKED_SIZE = "blockedSize";
-	private final String KEY_WAITING_SIZE = "waitingSize";
-	private final String KEY_QUEUE_LIST = "queueList";
+	private static final String KEY_TIMESTAMP = "timestamp";
+	private static final String KEY_QUEUE_SIZE = "queueSize";
+	private static final String KEY_BUILDABLE_SIZE = "buildableSize";
+	private static final String KEY_PENDING_SIZE = "pendingSize";
+	private static final String KEY_BLOCKED_SIZE = "blockedSize";
+	private static final String KEY_WAITING_SIZE = "waitingSize";
+	private static final String KEY_QUEUE_LIST = "queueList";
 	
 	public MongoQueueDAO(DBCollection coll) {
     	this.coll = coll;

@@ -21,18 +21,18 @@ public class MongoBuildDAO implements BuildDAO {
 
     private final DBCollection coll; 
     
-    private final String KEY_NUMBER = "number";
-    private final String KEY_NAME = "name";
-    private final String KEY_JOB_CLASS_NAME = "job_class";
-    private final String KEY_JDK_NAME = "jdk_name";
-    private final String KEY_LABEL = "label";
-    private final String KEY_SCHEDULED_TIME = "scheduled_time";
-    private final String KEY_STARTED_TIME = "started_time";
-    private final String KEY_FINISHED_TIME = "finished_time";
-    private final String KEY_RESULT = "result";
-    private final String KEY_BUILD_ON = "build_on";
-    private final String KEY_TRIGGER_CAUSES = "trigger_causes";
-    private final String KEY_PARAMETERS = "parameters";
+    private static final String KEY_NUMBER = "number";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_JOB_CLASS_NAME = "job_class";
+    private static final String KEY_JDK_NAME = "jdk_name";
+    private static final String KEY_LABEL = "label";
+    private static final String KEY_SCHEDULED_TIME = "scheduled_time";
+    private static final String KEY_STARTED_TIME = "started_time";
+    private static final String KEY_FINISHED_TIME = "finished_time";
+    private static final String KEY_RESULT = "result";
+    private static final String KEY_BUILD_ON = "build_on";
+    private static final String KEY_TRIGGER_CAUSES = "trigger_causes";
+    private static final String KEY_PARAMETERS = "parameters";
     
     public MongoBuildDAO(DBCollection coll) {
     	this.coll = coll;
