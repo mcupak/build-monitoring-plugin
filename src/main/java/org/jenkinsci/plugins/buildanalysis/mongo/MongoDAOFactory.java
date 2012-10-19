@@ -5,9 +5,9 @@ import java.net.UnknownHostException;
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
-import org.jenkinsci.plugins.buildanalysis.dao.LabelDAO;
+import org.jenkinsci.plugins.buildanalysis.dao.LabelsDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
-import org.jenkinsci.plugins.buildanalysis.dao.SlaveDAO;
+import org.jenkinsci.plugins.buildanalysis.dao.SlavesDAO;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -48,23 +48,23 @@ public class MongoDAOFactory extends DAOFactory {
         return new MongoQueueDAO(coll);
     }
     
-    public LabelDAO getLabelDAO() {
+    public LabelsDAO getLabelsDAO() {
         DBCollection coll = db.getCollection(LABEL_COLLECTION_NAME);
-        return new MongoLabelDAO(coll);
+        return new MongoLabelsDAO(coll);
     }
     
-    public LabelDAO getLabelDAO(String collectionName) {
+    public LabelsDAO getLabelsDAO(String collectionName) {
     	DBCollection coll = db.getCollection(collectionName);
-        return new MongoLabelDAO(coll);
+        return new MongoLabelsDAO(coll);
     }
     
-    public SlaveDAO getSlaveDAO() {
+    public SlavesDAO getSlavesDAO() {
     	DBCollection coll = db.getCollection(SLAVE_COLLECTION_NAME);
-        return new MongoSlaveDAO(coll);
+        return new MongoSlavesDAO(coll);
     }
     
-    public SlaveDAO getSlaveDAO(String collectionName) {
+    public SlavesDAO getSlavesDAO(String collectionName) {
     	DBCollection coll = db.getCollection(collectionName);
-        return new MongoSlaveDAO(coll);
+        return new MongoSlavesDAO(coll);
     }
 }

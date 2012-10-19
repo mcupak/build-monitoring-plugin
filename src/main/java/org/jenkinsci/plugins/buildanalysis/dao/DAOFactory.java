@@ -18,9 +18,9 @@ public abstract class DAOFactory {
     public abstract QueueDAO getQueueDAO();
     public abstract QueueDAO getQueueDAO(String collectionName);
     
-    public abstract LabelDAO getLabelDAO();
-    public abstract LabelDAO getLabelDAO(String collectionName);
+    public abstract LabelsDAO getLabelsDAO();
+    public abstract LabelsDAO getLabelsDAO(String collectionName);
     
-    public abstract SlaveDAO getSlaveDAO();
-    public abstract SlaveDAO getSlaveDAO(String collectionName);
+    public abstract SlavesDAO getSlavesDAO();
+    public abstract SlavesDAO getSlavesDAO(String collectionName);
 }

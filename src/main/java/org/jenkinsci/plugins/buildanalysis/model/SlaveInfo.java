@@ -5,11 +5,12 @@ import java.util.List;
 public class SlaveInfo {
 	
 	private String name;
+	private boolean isOnline;
 	private int totalExecutors;
 	private int busyExecutors;
 	private int queueLength;
 	private List<String> labels;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -18,6 +19,14 @@ public class SlaveInfo {
 		this.name = name;
 	}
 	
+	public boolean isOnline() {
+		return isOnline;
+	}
+
+	public void setOnline(boolean isOnline) {
+		this.isOnline = isOnline;
+	}
+
 	public int getTotalExecutors() {
 		return totalExecutors;
 	}

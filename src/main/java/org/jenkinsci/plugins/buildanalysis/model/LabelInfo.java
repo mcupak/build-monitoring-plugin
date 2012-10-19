@@ -3,8 +3,9 @@ package org.jenkinsci.plugins.buildanalysis.model;
 import java.util.List;
 
 public class LabelInfo {
-
+	
 	private String label;
+	private String labelExpression;
 	private int totalExecutors;
 	private int busyExecutors;
 	private int queueLength;
@@ -18,6 +19,14 @@ public class LabelInfo {
 		this.label = label;
 	}
 	
+	public String getLabelExpression() {
+		return labelExpression;
+	}
+
+	public void setLabelExpression(String labelExpression) {
+		this.labelExpression = labelExpression;
+	}
+
 	public int getTotalExecutors() {
 		return totalExecutors;
 	}
