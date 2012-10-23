@@ -1,11 +1,11 @@
 package org.jenkinsci.plugins.buildanalysis.mongo;
 
-import org.jenkinsci.plugins.buildanalysis.dao.StatsDAO;
-import org.jenkinsci.plugins.buildanalysis.model.StatsInfo;
+import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
+import org.jenkinsci.plugins.buildanalysis.model.GlobalInfo;
 
-public class MongoStatsDAO implements StatsDAO {
+public class MongoStatsDAO implements GlobalDAO {
     
-    public void create(StatsInfo queueInfo) {
+    public void create(GlobalInfo queueInfo) {
         
     }
 

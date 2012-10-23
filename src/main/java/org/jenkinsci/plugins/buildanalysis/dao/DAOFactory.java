@@ -12,6 +12,9 @@ public abstract class DAOFactory {
         return new MongoDAOFactory(dbConfig);
     }
     
+    public abstract GlobalDAO getGlobalDAO();
+    public abstract GlobalDAO getGlobalDAO(String collectionName);
+    
     public abstract BuildDAO getBuildDAO();
     public abstract BuildDAO getBuildDAO(String collectionName);
     

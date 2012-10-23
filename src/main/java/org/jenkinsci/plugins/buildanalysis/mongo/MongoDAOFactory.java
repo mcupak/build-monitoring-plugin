@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
+import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.LabelsDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.SlavesDAO;
@@ -15,6 +16,7 @@ import com.mongodb.Mongo;
 
 public class MongoDAOFactory extends DAOFactory {
 
+	private static final String GLOBAL_COLLECTION_NAME = "global";
 	private static final String BUILDS_COLLECTION_NAME = "builds";
 	private static final String QUEUE_COLLECTION_NAME = "queue";
 	private static final String LABEL_COLLECTION_NAME = "labels";
@@ -27,6 +29,16 @@ public class MongoDAOFactory extends DAOFactory {
 		this.mongo = new Mongo(dbConfig.getHost());
 		this.db = mongo.getDB(dbConfig.getDbName());
 	}
+	
+	public GlobalDAO getGlobalDAO() {
+        DBCollection coll = db.getCollection(GLOBAL_COLLECTION_NAME);
+        return new MongoGlobalDAO(coll);
+    }
+	
+	public GlobalDAO getGlobalDAO(String collectionName) {
+        DBCollection coll = db.getCollection(collectionName);
+        return new MongoGlobalDAO(coll);
+    }
 	
 	public BuildDAO getBuildDAO() {
         DBCollection coll = db.getCollection(BUILDS_COLLECTION_NAME);
