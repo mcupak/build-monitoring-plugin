@@ -23,7 +23,6 @@ public class MongoSlavesDAO implements SlavesDAO {
 	}
 	
 	public void create(SlavesInfo slavesInfo) {
-		System.out.println("Inserting" + slavesInfo);
 		coll.insert(getDbObject(slavesInfo));
 	}
 	

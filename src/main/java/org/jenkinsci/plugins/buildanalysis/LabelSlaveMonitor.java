@@ -46,8 +46,6 @@ public class LabelSlaveMonitor extends PeriodicWork {
     }
     
     protected void doRun() throws Exception {
-    	System.out.println("LabelSlaves....");
-    	
     	Jenkins jenkins = Jenkins.getInstance();
     	List<BuildableItem> bis = jenkins.getQueue().getBuildableItems();
     	Set<Label> labels = jenkins.getLabels();
@@ -84,8 +82,6 @@ public class LabelSlaveMonitor extends PeriodicWork {
     	}
     	sis.setSlaves(sil);
     	slavesDAO.create(sis);
-    	
-    	System.out.println("LabelSlaves....end");
     }
     
     
