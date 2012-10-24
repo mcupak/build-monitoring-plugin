@@ -2,6 +2,7 @@ package org.jenkinsci.plugins.buildanalysis;
 
 import hudson.Plugin;
 import jenkins.model.Jenkins;
+import net.sf.json.JSONArray;
 
 import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
@@ -24,5 +25,14 @@ public class BuildAnalysisPlugin extends Plugin {
         buildDAO.getBuilds("test-matrix");
 	}
 	
+	
+	public JSONArray getTestSerie() {
+		JSONArray ja = new JSONArray();
+		ja.add(new int[] {0, 2});
+		ja.add(new int[] {1, 6});
+		ja.add(new int[] {2, 7});
+		ja.add(new int[] {3, 10});
+		return ja;
+	}
 
 }

@@ -1,12 +1,38 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+
+<script type="text/javascript" src="/plugin/build-analysis/jqPlot/jquery.min.js"></script>
+<script type="text/javascript" src="/plugin/build-analysis/jqPlot/jquery.jqplot.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/plugin/build-analysis/jqPlot/jquery.jqplot.css" />
+
+<script type="text/javascript" >
+var plotOptions = {};// = ${it.getPlotOptsJson()};
+var series = ${it.getTestSerie()};
+</script>
+
+<!-- script type="text/javascript" >
+$(document).ready(function createChart() {
+    var options = loadOptions(plotOptions, series);
+    chart = new Highcharts.Chart(options);
+});
+</script -->
+
+<script type="text/javascript" >
+$(document).ready(function () {
+  $jq = jQuery.noConflict();
+  plot1 = $jq.jqplot("chart1", [series], {
+    seriesDefaults:{
+        linePattern: 'dashed',
+        showMarker: false,
+        shadow: false
+    }
+  });
+});
+</script>
+	
 	<l:layout title="${%Build Analysis}" secured="true">
-
 		<l:side-panel>
-			<l:tasks>
-				<l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back to Dashboard}" />
-			</l:tasks>
+			<l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back to Dashboard}" />
 		</l:side-panel>
-
 		<l:main-panel>
 			<h1>
 				<!-- img src="${resURL}/plugin/disk-usage/icons/diskusage48.png" / -->
@@ -14,7 +40,15 @@
 			</h1>
 
 			<a href="query">Some query</a>
+			
+			<h1>Data processing plugin</h1>
+            <p>
+            	<span style="color:red"><b>${it.errorMsg}</b></span>
+            </p> 
+
+			<div id="chart1" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
 
 		</l:main-panel>
 	</l:layout>
+
 </j:jelly>
