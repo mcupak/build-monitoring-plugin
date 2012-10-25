@@ -1,15 +1,13 @@
 package org.jenkinsci.plugins.buildanalysis.mongo;
 
-import hudson.util.IOUtils;
-
-import java.io.IOException;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
 import org.jenkinsci.plugins.buildanalysis.model.GlobalInfo;
+import org.jenkinsci.plugins.buildanalysis.utils.MapReduceUtils;
+import org.jenkinsci.plugins.buildanalysis.utils.MapReduceUtils.MapReduceFunctions;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -19,14 +17,15 @@ import com.mongodb.MapReduceOutput;
 
 public class MongoGlobalDAO implements GlobalDAO {
 	
-	private final DBCollection coll;
-	
+	private static final String COLLECTION_NAME = "global";
 	private static final String KEY_TIMESTAMP = "timestamp";
 	private static final String KEY_NUM_PROJECTS = "numberOfProjetcs";
 	private static final String KEY_NUM_BUILDS = "numberOfBuilds";
 	private static final String KEY_NUM_SLAVES = "numberOfSlaves";
 	private static final String KEY_NUM_OFFLINE_SLAVES = "numberOfOfflineSlaves";
 	private static final String KEY_NUM_IDLE_SLAVES = "numberOfIdleSlaves";
+	
+	private final DBCollection coll;
 	
 	public MongoGlobalDAO(DBCollection coll) {
 		this.coll = coll;
@@ -52,6 +51,8 @@ public class MongoGlobalDAO implements GlobalDAO {
 	}
 	
 	public JSONObject getSeries() {
+		JSONArray projects = new JSONArray();
+		JSONArray builds = new JSONArray();
 		JSONArray slaves = new JSONArray();
 		JSONArray offline = new JSONArray();
 		JSONArray idle = new JSONArray();
@@ -60,10 +61,22 @@ public class MongoGlobalDAO implements GlobalDAO {
     	for(DBObject o : mr.results()) {
     		System.out.println(o);
     		BasicDBObject value = (BasicDBObject)o.get("value");
-    		String date = value.getString("date"); 
+    		String date = value.getString("date");
+    		Double projectsAvg = (Double)value.get("projects");
+    		Double buildsAvg = (Double)value.get("builds");
     		Double slavesAvg = (Double)value.get("slaves");
     		Double offlineAvg = (Double)value.get("offline");
     		Double idleAvg = (Double)value.get("idle");
+    		
+    		JSONArray projectsPoint = new JSONArray();
+    		projectsPoint.add(date);
+    		projectsPoint.add(projectsAvg);
+    		projects.add(projectsPoint);
+    		
+    		JSONArray buildsPoint = new JSONArray();
+    		buildsPoint.add(date);
+    		buildsPoint.add(buildsAvg);
+    		builds.add(buildsPoint);
     		
     		JSONArray slavesPoint = new JSONArray();
     		slavesPoint.add(date);
@@ -83,25 +96,18 @@ public class MongoGlobalDAO implements GlobalDAO {
     	}
     	
     	JSONObject jo = new JSONObject();
+    	jo.put("projects", projects);
+    	jo.put("builds", builds);
     	jo.put("slaves", slaves);
     	jo.put("offline", offline);
     	jo.put("idle", idle);
     	
 		return jo;
 	}
-
+	
 	private MapReduceOutput mapReduce() {
-    	String map = "";
-    	String reduce = "";
-    	ClassLoader classLoader = getClass().getClassLoader();
-    	try {
-    		map = IOUtils.toString(classLoader.getResourceAsStream("js/MapReduce/mapTest.js"));
-    		reduce = IOUtils.toString(classLoader.getResourceAsStream("js/MapReduce/reduceTest.js"));
-    	} catch(IOException e) {
-    		e.printStackTrace();
-    	}
-    	
-    	MapReduceOutput out = coll.mapReduce(map, reduce, null, MapReduceCommand.OutputType.INLINE, null);
+    	MapReduceFunctions mr = MapReduceUtils.getMapReduce(COLLECTION_NAME);
+    	MapReduceOutput out = coll.mapReduce(mr.getMap(), mr.getReduce(), null, MapReduceCommand.OutputType.INLINE, null);
     	return out;
     }
 	

@@ -14,9 +14,11 @@ var series = ${it.getTestSeries()};
 <script type="text/javascript" >
 $(document).ready(function() {
 	$jq = jQuery.noConflict();
-	doDatePlot($jq, "slaves", series["slaves"]);
-	doDatePlot($jq, "offline", series["offline"]);
-	doDatePlot($jq, "idle", series["idle"]);
+	doDatePlot($jq, "Number of projects", "projects", series["projects"]);
+	doDatePlot($jq, "Number of builds", "builds", series["builds"]);
+	doDatePlot($jq, "Number of slaves", "slaves", series["slaves"]);
+	doDatePlot($jq, "Number of offline slaves", "offline", series["offline"]);
+	doDatePlot($jq, "Number of idle slaves", "idle", series["idle"]);
 });
 </script>
 	
@@ -27,6 +29,8 @@ $(document).ready(function() {
        	<p>
         	<span style="color:red"><b>${it.errorMsg}</b></span>
         </p> 
+        <div id="projects" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
+        <div id="builds" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
 		<div id="slaves" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
 		<div id="offline" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
 		<div id="idle" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>

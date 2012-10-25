@@ -1,6 +1,6 @@
-function doDatePlot(jq, contentHolder, series) {
+function doDatePlot(jq, title, contentHolder, series) {
   plot1 = jq.jqplot(contentHolder, [series], {
-    title:'Default Date Axis',
+    title:title,
     axes:{
     	xaxis:{renderer:$jq.jqplot.DateAxisRenderer}
     	//yaxis: {min:0.0, max: 2.0}
