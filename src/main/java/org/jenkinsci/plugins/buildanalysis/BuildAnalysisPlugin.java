@@ -1,10 +1,11 @@
 package org.jenkinsci.plugins.buildanalysis;
 
+import hudson.Plugin;
+
 import java.net.UnknownHostException;
 
-import hudson.Plugin;
 import jenkins.model.Jenkins;
-import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
@@ -29,10 +30,10 @@ public class BuildAnalysisPlugin extends Plugin {
 	}
 	
 	
-	public JSONArray getTestSerie() throws UnknownHostException {
+	public JSONObject getTestSeries() throws UnknownHostException {
 		DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
 		GlobalDAO globalDAO = DAOFactory.getDAOFactory(dbConfig).getGlobalDAO();
-        return globalDAO.doQuery();
+        return globalDAO.getSeries();
 	}
 
 }

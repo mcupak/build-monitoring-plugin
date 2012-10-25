@@ -5,6 +5,7 @@ import hudson.util.IOUtils;
 import java.io.IOException;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
@@ -50,20 +51,43 @@ public class MongoGlobalDAO implements GlobalDAO {
 		return doc;
 	}
 	
-	public JSONArray doQuery() {
-		JSONArray ja = new JSONArray();
+	public JSONObject getSeries() {
+		JSONArray slaves = new JSONArray();
+		JSONArray offline = new JSONArray();
+		JSONArray idle = new JSONArray();
+		
     	MapReduceOutput mr = mapReduce();
     	for(DBObject o : mr.results()) {
     		System.out.println(o);
     		BasicDBObject value = (BasicDBObject)o.get("value");
     		String date = value.getString("date"); 
-    		Double avg = (Double)value.get("avg");
-    		JSONArray point = new JSONArray();
-    		point.add(date);
-    		point.add(avg);
-    		ja.add(point);
+    		Double slavesAvg = (Double)value.get("slaves");
+    		Double offlineAvg = (Double)value.get("offline");
+    		Double idleAvg = (Double)value.get("idle");
+    		
+    		JSONArray slavesPoint = new JSONArray();
+    		slavesPoint.add(date);
+    		slavesPoint.add(slavesAvg);
+    		slaves.add(slavesPoint);
+    		
+    		JSONArray offlinePoint = new JSONArray();
+    		offlinePoint.add(date);
+    		offlinePoint.add(offlineAvg);
+    		offline.add(offlinePoint);
+    		
+    		JSONArray idlePoint = new JSONArray();
+    		idlePoint.add(date);
+    		idlePoint.add(idleAvg);
+    		idle.add(idlePoint);
+    		
     	}
-		return ja;
+    	
+    	JSONObject jo = new JSONObject();
+    	jo.put("slaves", slaves);
+    	jo.put("offline", offline);
+    	jo.put("idle", idle);
+    	
+		return jo;
 	}
 
 	private MapReduceOutput mapReduce() {

@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/plugin/build-analysis/jqPlot/jquery.min.js"></script>
 <script type="text/javascript" src="/plugin/build-analysis/jqPlot/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="/plugin/build-analysis/jqPlot/plugins/jqplot.dateAxisRenderer.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/plugin/build-analysis/jqPlot/jquery.jqplot.css" />
+<link class="include" rel="stylesheet" type="text/css" href="/plugin/build-analysis/jqPlot/jquery.jqplot.min.css" />
 
 <script type="text/javascript" >
 var plotOptions = {};// = ${it.getPlotOptsJson()};
@@ -22,16 +22,17 @@ $(document).ready(function () {
   $jq = jQuery.noConflict();
   plot1 = $jq.jqplot("chart1", [series], {
     title:'Default Date Axis',
-    axes:{xaxis:{renderer:$jq.jqplot.DateAxisRenderer}},
+    axes:{
+    	xaxis:{renderer:$jq.jqplot.DateAxisRenderer}
+    	//yaxis: {min:0.0, max: 2.0}
+    },
     series:[{lineWidth:4, markerOptions:{style:'square'}}]
   });
 });
 </script>
 	
 	<l:layout title="${%Build Analysis}" secured="true">
-		<l:side-panel>
-			<l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back to Dashboard}" />
-		</l:side-panel>
+		<st:include page="sidepanel.jelly" />
 		<l:main-panel>
 			<h1>
 				<!-- img src="${resURL}/plugin/disk-usage/icons/diskusage48.png" / -->
