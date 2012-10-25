@@ -2,6 +2,7 @@
 
 <script type="text/javascript" src="/plugin/build-analysis/jqPlot/jquery.min.js"></script>
 <script type="text/javascript" src="/plugin/build-analysis/jqPlot/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="/plugin/build-analysis/jqPlot/plugins/jqplot.dateAxisRenderer.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/plugin/build-analysis/jqPlot/jquery.jqplot.css" />
 
 <script type="text/javascript" >
@@ -20,11 +21,9 @@ $(document).ready(function createChart() {
 $(document).ready(function () {
   $jq = jQuery.noConflict();
   plot1 = $jq.jqplot("chart1", [series], {
-    seriesDefaults:{
-        linePattern: 'dashed',
-        showMarker: false,
-        shadow: false
-    }
+    title:'Default Date Axis',
+    axes:{xaxis:{renderer:$jq.jqplot.DateAxisRenderer}},
+    series:[{lineWidth:4, markerOptions:{style:'square'}}]
   });
 });
 </script>

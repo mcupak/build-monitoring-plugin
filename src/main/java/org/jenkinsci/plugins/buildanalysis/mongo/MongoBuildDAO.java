@@ -80,11 +80,6 @@ public class MongoBuildDAO implements BuildDAO {
     		System.out.println(o);
     	}
     	
-    	System.out.println("MAP_REDUCE:");
-    	MapReduceOutput mr = mapReduce();
-    	for(DBObject o : mr.results()) {
-    		System.out.println(o);
-    	}
     }
     
     public void getBuild(String jobName, int number) {
@@ -129,6 +124,9 @@ public class MongoBuildDAO implements BuildDAO {
     	}
     	
     	MapReduceOutput out = coll.mapReduce(map, reduce, null, MapReduceCommand.OutputType.INLINE, null);
+    	for(DBObject o : out.results()) {
+    		System.out.println("Values: " + o.get("value"));
+    	}
     	return out;
     }
     
