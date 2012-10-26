@@ -9,8 +9,8 @@ function(k,vals) {
 		 projects += vals[i]["projects"];
 		 builds += vals[i]["builds"];
 		 slaves += vals[i]["slaves"];
-		 offline += vals[i]["offlineSlaves"];
-		 idle += vals[i]["idleSlaves"];
+		 offline += vals[i]["offline"];
+		 idle += vals[i]["idle"];
 	 }
 	 
 	 var date = k["year"] + "-" + (k["month"]+1) + "-" + k["day"] + " 0:00AM";
