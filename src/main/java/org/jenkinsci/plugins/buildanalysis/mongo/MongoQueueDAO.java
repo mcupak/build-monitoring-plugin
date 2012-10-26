@@ -7,6 +7,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
 import org.jenkinsci.plugins.buildanalysis.model.QueueInfo;
 import org.jenkinsci.plugins.buildanalysis.model.QueueItemInfo;
+import org.jenkinsci.plugins.buildanalysis.utils.QueueUtils;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -35,7 +36,7 @@ public class MongoQueueDAO implements QueueDAO {
         doc.put(KEY_PENDING_SIZE, queueInfo.getPendingSize());
         doc.put(KEY_BLOCKED_SIZE, queueInfo.getBlockedSize());
         doc.put(KEY_WAITING_SIZE, queueInfo.getWaitingSize());
-        doc.put(KEY_QUEUE_LIST, queueListToDBObject(queueInfo.getQueueList()));
+        doc.put(KEY_QUEUE_LIST, QueueUtils.queueListToDBObject(queueInfo.getQueueList()));
         coll.insert(doc);
     }
 
@@ -43,12 +44,5 @@ public class MongoQueueDAO implements QueueDAO {
         throw new NotImplementedException();
     }
     
-    private List<BasicDBObject> queueListToDBObject(List<QueueItemInfo> qiList) {
-    	List<BasicDBObject> dbList = new ArrayList<BasicDBObject>();
-    	MongoQueueItemDAO qDao = new MongoQueueItemDAO();
-    	for(QueueItemInfo qi : qiList) {
-    		dbList.add(qDao.getDBObject(qi));
-    	}
-    	return dbList;
-    }
+    
 }

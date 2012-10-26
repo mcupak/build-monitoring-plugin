@@ -4,7 +4,13 @@ import hudson.model.Label;
 import hudson.model.Node;
 import hudson.model.Queue.BuildableItem;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.jenkinsci.plugins.buildanalysis.model.QueueItemInfo;
+import org.jenkinsci.plugins.buildanalysis.mongo.MongoQueueItemDAO;
+
+import com.mongodb.BasicDBObject;
 
 public class QueueUtils {
 
@@ -25,5 +31,14 @@ public class QueueUtils {
         }
         return count;
 	}
+	
+	public static List<BasicDBObject> queueListToDBObject(List<QueueItemInfo> qiList) {
+    	List<BasicDBObject> dbList = new ArrayList<BasicDBObject>();
+    	MongoQueueItemDAO qDao = new MongoQueueItemDAO();
+    	for(QueueItemInfo qi : qiList) {
+    		dbList.add(qDao.getDBObject(qi));
+    	}
+    	return dbList;
+    }
 	
 }
