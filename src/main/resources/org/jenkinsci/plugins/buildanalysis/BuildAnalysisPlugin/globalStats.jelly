@@ -8,7 +8,7 @@
 <script type="text/javascript" src="/plugin/build-analysis/js/plottingFunctions.js"></script>
 
 <script type="text/javascript" > <!-- jelly ${} needs to be in a separate tag that jquery tags -->
-var series = ${it.getTestSeries()};
+var series = ${it.getGlobalSeries()};
 </script>
 
 <script type="text/javascript" >
@@ -19,6 +19,7 @@ $(document).ready(function() {
 	doDatePlot($jq, "Number of slaves", "slaves", series["slaves"]);
 	doDatePlot($jq, "Number of offline slaves", "offline", series["offline"]);
 	doDatePlot($jq, "Number of idle slaves", "idle", series["idle"]);
+	doDatePlot($jq, "Queue length", "queueSize", series["queueSize"]);
 });
 </script>
 	
@@ -34,6 +35,7 @@ $(document).ready(function() {
 		<div id="slaves" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
 		<div id="offline" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
 		<div id="idle" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
+		<div id="queueSize" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
 	</l:main-panel>
 </l:layout>
 

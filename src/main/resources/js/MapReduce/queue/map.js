@@ -1,4 +1,4 @@
 function() {
 	emit({year: this.timestamp.getFullYear(), month: this.timestamp.getMonth(), day: this.timestamp.getDate()}, 
-		{projects: this.numberOfProjetcs, builds: this.numberOfBuilds, slaves: this.numberOfSlaves, offlineSlaves: this.numberOfOfflineSlaves, idleSlaves: this.numberOfIdleSlaves});
+		{queueSize: this.queueSize, buildableSize: this.buildableSize, pendingSize: this.pendingSize, blockedSize: this.blockedSize, waitingSize: this.waitingSize});
 }

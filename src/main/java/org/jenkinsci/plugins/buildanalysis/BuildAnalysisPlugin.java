@@ -12,6 +12,7 @@ import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
+import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
@@ -30,10 +31,18 @@ public class BuildAnalysisPlugin extends Plugin {
 	}
 	
 	
-	public JSONObject getTestSeries() throws UnknownHostException {
+	public JSONObject getGlobalSeries() throws UnknownHostException {
 		DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+		
+		//global statistics
 		GlobalDAO globalDAO = DAOFactory.getDAOFactory(dbConfig).getGlobalDAO();
-        return globalDAO.getSeries();
+        JSONObject series = globalDAO.getSeries();
+        
+        //queue length
+        QueueDAO queueDAO = DAOFactory.getDAOFactory(dbConfig).getQueueDAO();
+        series.put("queueSize", queueDAO.getQueueSizeSerie());
+        
+        return series;
 	}
 
 }

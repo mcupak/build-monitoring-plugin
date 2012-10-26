@@ -1,21 +1,25 @@
 package org.jenkinsci.plugins.buildanalysis.mongo;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
 import org.jenkinsci.plugins.buildanalysis.model.QueueInfo;
-import org.jenkinsci.plugins.buildanalysis.model.QueueItemInfo;
+import org.jenkinsci.plugins.buildanalysis.utils.MapReduceUtils;
+import org.jenkinsci.plugins.buildanalysis.utils.MapReduceUtils.MapReduceFunctions;
 import org.jenkinsci.plugins.buildanalysis.utils.QueueUtils;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.MapReduceCommand;
+import com.mongodb.MapReduceOutput;
 
 public class MongoQueueDAO implements QueueDAO {
     
 	private final DBCollection coll;
 	
+	private static final String COLLECTION_NAME = "queue";
 	private static final String KEY_TIMESTAMP = "timestamp";
 	private static final String KEY_QUEUE_SIZE = "queueSize";
 	private static final String KEY_BUILDABLE_SIZE = "buildableSize";
@@ -44,5 +48,27 @@ public class MongoQueueDAO implements QueueDAO {
         throw new NotImplementedException();
     }
     
+    public JSONArray getQueueSizeSerie() {
+    	JSONArray queueSize = new JSONArray();
+		
+    	MapReduceOutput mr = mapReduce();
+    	for(DBObject o : mr.results()) {
+    		BasicDBObject value = (BasicDBObject)o.get("value");
+    		String date = value.getString("date");
+    		Double queueAvg = (Double)value.get("queueSize");
+    		
+    		JSONArray queuePoint = new JSONArray();
+    		queuePoint.add(date);
+    		queuePoint.add(queueAvg);
+    		queueSize.add(queuePoint);
+    	}
+    	
+		return queueSize;
+    }
     
+    private MapReduceOutput mapReduce() {
+    	MapReduceFunctions mr = MapReduceUtils.getMapReduce(COLLECTION_NAME);
+    	MapReduceOutput out = coll.mapReduce(mr.getMap(), mr.getReduce(), null, MapReduceCommand.OutputType.INLINE, null);
+    	return out;
+    }
 }

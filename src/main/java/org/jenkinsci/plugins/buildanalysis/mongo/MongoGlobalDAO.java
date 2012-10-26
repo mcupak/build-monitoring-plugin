@@ -59,7 +59,6 @@ public class MongoGlobalDAO implements GlobalDAO {
 		
     	MapReduceOutput mr = mapReduce();
     	for(DBObject o : mr.results()) {
-    		System.out.println(o);
     		BasicDBObject value = (BasicDBObject)o.get("value");
     		String date = value.getString("date");
     		Double projectsAvg = (Double)value.get("projects");

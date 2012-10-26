@@ -1,24 +1,24 @@
 function(k,vals) { 
-	 var projects = 0;
-	 var builds = 0;
-	 var slaves = 0;
-	 var offline = 0;
-	 var idle = 0;
+	 var queueSize = 0;
+	 var buildableSize = 0;
+	 var pendingSize = 0;
+	 var blockedSize = 0;
+	 var waitingSize = 0;
 	 
 	 for(var i in vals) {
-		 projects += vals[i]["projects"];
-		 builds += vals[i]["builds"];
-		 slaves += vals[i]["slaves"];
-		 offline += vals[i]["offlineSlaves"];
-		 idle += vals[i]["idleSlaves"];
+		queueSize += vals[i]["queueSize"];
+		buildableSize += vals[i]["buildableSize"];
+		pendingSize += vals[i]["pendingSize"];
+		blockedSize += vals[i]["blockedSize"];
+		waitingSize += vals[i]["waitingSize"];
 	 }
 	 
 	 var date = k["year"] + "-" + (k["month"]+1) + "-" + k["day"] + " 0:00AM";
-	 var avgProjects = projects/vals.length;
-	 var avgBuilds = builds/vals.length;
-	 var avgSlaves = slaves/vals.length;
-	 var avgOffline = offline/vals.length;
-	 var avgIdle = idle/vals.length;
+	 var avgQueueSize = queueSize/vals.length;
+	 var avgBuildableSize = buildableSize/vals.length;
+	 var avgPendingSize = pendingSize/vals.length;
+	 var avgBlockedSize = blockedSize/vals.length;
+	 var avgWaitingSize = waitingSize/vals.length;
 	 
-	 return {date: date, projects: avgProjects, builds: avgBuilds, slaves: avgSlaves, offline: avgOffline, idle: avgIdle};
+	 return {date: date, queueSize: avgQueueSize, buildableSize: avgBuildableSize, pendingSize: avgPendingSize, blockedSize: avgBlockedSize, waitingSize: avgWaitingSize};
 }
