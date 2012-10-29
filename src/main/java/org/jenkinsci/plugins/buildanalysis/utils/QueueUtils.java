@@ -14,6 +14,12 @@ import com.mongodb.BasicDBObject;
 
 public class QueueUtils {
 
+	/**
+	 * 
+	 * @param {@link Lable} l
+	 * @param bis {@link List} of {@link BuildableItem}s in the waiting in the queue
+	 * @return Number of items waiting in the queue for given {@link Lable} l  
+	 */
 	public static int getLabelQueue(Label l, List<BuildableItem> bis) {
 		int count = 0;
         for (BuildableItem bi : bis) {
@@ -23,6 +29,12 @@ public class QueueUtils {
         return count;
 	}
 	
+	/**
+	 * 
+	 * @param {@link Node} n
+	 * @param bis {@link List} of {@link BuildableItem}s in the waiting in the queue
+	 * @return Number of items waiting in the queue for given {@link Node} n
+	 */
 	public static int getSlaveQueue(Node n, List<BuildableItem> bis) {
 		int count = 0;
         for (BuildableItem bi : bis) {
@@ -32,6 +44,12 @@ public class QueueUtils {
         return count;
 	}
 	
+	
+	/**
+	 * 
+	 * Converts {@link List} of {@link QueueItemInfo} to Mongo {@link List} of {@link BasicDBObject}
+	 * 
+	 */
 	public static List<BasicDBObject> queueListToDBObject(List<QueueItemInfo> qiList) {
     	List<BasicDBObject> dbList = new ArrayList<BasicDBObject>();
     	MongoQueueItemDAO qDao = new MongoQueueItemDAO();
