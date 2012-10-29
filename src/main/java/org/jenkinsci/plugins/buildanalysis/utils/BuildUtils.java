@@ -18,7 +18,7 @@ import java.util.Map.Entry;
 
 public class BuildUtils {
 	
-	private static final String MATRIX_SEPARATOR = "::";
+	public static final String MATRIX_SEPARATOR = "::";
 	
 	public static String getProjectName(AbstractProject<?,?> project) {
     	if(project instanceof MatrixConfiguration) {
