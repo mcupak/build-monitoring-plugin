@@ -28,7 +28,8 @@ public class MongoQueueItemDAO {
         doc.put(KEY_NAME, qi.getName());
         doc.put(KEY_CLASS_NAME, qi.getClassName());
         doc.put(KEY_PARAMS, qi.getParams());
-        doc.put(KEY_BLOCKAGE_CAUSES, qi.getBlockageCause().getShortDescription());
+        if(qi.getBlockageCause() != null)
+        	doc.put(KEY_BLOCKAGE_CAUSES, qi.getBlockageCause().getShortDescription());
         doc.put(KEY_IS_CONCURENT_BUILD, qi.isConcurentBuild());
         doc.put(KEY_IS_BUILDABLE, qi.isBuildable());
         doc.put(KEY_IS_BLOCKED, qi.isBlocked());
