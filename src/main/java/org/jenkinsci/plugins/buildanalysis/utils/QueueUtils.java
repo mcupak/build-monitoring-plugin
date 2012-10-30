@@ -17,13 +17,13 @@ public class QueueUtils {
 	/**
 	 * 
 	 * @param {@link Lable} l
-	 * @param bis {@link List} of {@link BuildableItem}s in the waiting in the queue
+	 * @param bil {@link List} of {@link BuildableItem}s in the waiting in the queue
 	 * @return Number of items waiting in the queue for given {@link Lable} l  
 	 */
-	public static int getLabelQueue(Label l, List<BuildableItem> bis) {
+	public static int getLabelQueue(Label l, List<BuildableItem> bil) {
 		int count = 0;
-        for (BuildableItem bi : bis) {
-            if(bi.task.getAssignedLabel() == l)
+        for (BuildableItem bi : bil) {
+            if(l.equals(bi.task.getAssignedLabel()))
                 count++;
         }
         return count;
@@ -32,12 +32,12 @@ public class QueueUtils {
 	/**
 	 * 
 	 * @param {@link Node} n
-	 * @param bis {@link List} of {@link BuildableItem}s in the waiting in the queue
+	 * @param bil {@link List} of {@link BuildableItem}s in the waiting in the queue
 	 * @return Number of items waiting in the queue for given {@link Node} n
 	 */
-	public static int getSlaveQueue(Node n, List<BuildableItem> bis) {
+	public static int getSlaveQueue(Node n, List<BuildableItem> bil) {
 		int count = 0;
-        for (BuildableItem bi : bis) {
+        for (BuildableItem bi : bil) {
             if(n.canTake(bi) ==  null)
                 count++;
         }
