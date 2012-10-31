@@ -17,7 +17,6 @@ import com.mongodb.MapReduceOutput;
 
 public class MongoGlobalDAO implements GlobalDAO {
 	
-	private static final String COLLECTION_NAME = "global";
 	private static final String KEY_TIMESTAMP = "timestamp";
 	private static final String KEY_NUM_PROJECTS = "numberOfProjetcs";
 	private static final String KEY_NUM_BUILDS = "numberOfBuilds";
