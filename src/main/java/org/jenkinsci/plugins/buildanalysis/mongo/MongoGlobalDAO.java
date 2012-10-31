@@ -105,7 +105,7 @@ public class MongoGlobalDAO implements GlobalDAO {
 	}
 	
 	private MapReduceOutput mapReduce() {
-    	MapReduceFunctions mr = MapReduceUtils.getMapReduce(COLLECTION_NAME);
+    	MapReduceFunctions mr = MapReduceUtils.getMapReduce(MongoDAOFactory.GLOBAL_COLLECTION_NAME);
     	MapReduceOutput out = coll.mapReduce(mr.getMap(), mr.getReduce(), null, MapReduceCommand.OutputType.INLINE, null);
     	return out;
     }

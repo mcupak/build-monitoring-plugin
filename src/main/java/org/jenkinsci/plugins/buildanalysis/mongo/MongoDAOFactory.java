@@ -16,11 +16,11 @@ import com.mongodb.Mongo;
 
 public class MongoDAOFactory extends DAOFactory {
 
-	private static final String GLOBAL_COLLECTION_NAME = "global";
-	private static final String BUILDS_COLLECTION_NAME = "builds";
-	private static final String QUEUE_COLLECTION_NAME = "queue";
-	private static final String LABEL_COLLECTION_NAME = "labels";
-	private static final String SLAVE_COLLECTION_NAME = "slaves";
+	public static final String GLOBAL_COLLECTION_NAME = "global";
+	public static final String BUILDS_COLLECTION_NAME = "builds";
+	public static final String QUEUE_COLLECTION_NAME = "queue";
+	public static final String LABEL_COLLECTION_NAME = "labels";
+	public static final String SLAVE_COLLECTION_NAME = "slaves";
 	
 	private final Mongo mongo;
     private final DB db;
