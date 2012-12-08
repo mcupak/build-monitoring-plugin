@@ -2,17 +2,59 @@ package org.jenkinsci.plugins.buildanalysis.model;
 
 import hudson.model.queue.CauseOfBlockage;
 
+/**
+ * Information about one single item waiting in the job queue
+ * 
+ * @author vjuranek
+ *
+ */
 public class QueueItemInfo {
 
     private int id;
+    
+    /**
+     * Build number
+     */
     private int number;
+    
+    /**
+     * Build name
+     */
     private String name;
+    
+    /**
+     * Class name of the job (e.g. freestyle, matrix etc.)
+     */
     private String className;
+    
+    /** 
+     * Parameters the build is started with
+     */
     private String params;
+    
+    /**
+     * Reason why item waits in the queue
+     */
     private CauseOfBlockage blockageCause;
+    
+    /**
+     * True if multiple builds of the same job can run simultaneously
+     */
     private boolean isConcurentBuild;
+    
+    /**
+     * True if item can be build, but waits in the queue e.g. because of waiting for available executor 
+     */
     private boolean isBuildable;
+    
+    /**
+     * True is item in the queue is blocked, e.g. because concurrent builds are not allowed and previous build doesn't finish yet 
+     */
     private boolean isBlocked;
+    
+    /**
+     * True if waits in the queue too long, e.g. because there isn't any executor where the item can be built
+     */
     private boolean isStucked;
     
 	public int getId() {
