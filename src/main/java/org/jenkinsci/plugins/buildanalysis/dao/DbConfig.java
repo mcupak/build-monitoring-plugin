@@ -8,22 +8,42 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 public class DbConfig implements Describable<DbConfig> { 
 
-	private String host;
+	private String hostname;
 	private String dbName;
+	private String username;
+	private String password;
 
 	@DataBoundConstructor
-	public DbConfig(String host, String dbName) {
+	public DbConfig(String host, String username, String password, String dbName) {
 		System.out.println("DbConfig konstruktor");
-		this.host = host;
+		this.hostname = host;
+		this.username = username;
+		this.password = password;
 		this.dbName = dbName;
 	}
 
-	public String getHost() {
-		return host;
+	public String getHostname() {
+		return hostname;
 	}
 
-	public void setHost(String host) {
-		this.host = host;
+	public void setHostname(String host) {
+		this.hostname = host;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getDbName() {
