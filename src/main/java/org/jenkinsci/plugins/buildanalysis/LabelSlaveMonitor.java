@@ -6,6 +6,7 @@ import hudson.model.Label;
 import hudson.model.Node;
 import hudson.model.Queue.BuildableItem;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.jenkinsci.plugins.buildanalysis.model.LabelsInfo;
 import org.jenkinsci.plugins.buildanalysis.model.SlaveInfo;
 import org.jenkinsci.plugins.buildanalysis.model.SlavesInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.LabelUtils;
+import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.QueueUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.SlaveUtils;
 
@@ -32,13 +34,11 @@ public class LabelSlaveMonitor extends PeriodicWork {
 	// TODO make it configurable via Aperiodic work?
 	private static final int PERIOD_MINUTES = 1;
 
-	private final LabelsDAO labelsDAO;
-	private final SlavesDAO slavesDAO;
+	private LabelsDAO labelsDAO;
+	private SlavesDAO slavesDAO;
 	
-	public LabelSlaveMonitor() throws Exception {
-		DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        this.labelsDAO = DAOFactory.getDAOFactory(dbConfig).getLabelsDAO();
-        this.slavesDAO = DAOFactory.getDAOFactory(dbConfig).getSlavesDAO();
+	public LabelSlaveMonitor() throws UnknownHostException {
+		load();
 	}
 	
 	public long getRecurrencePeriod() {
@@ -46,6 +46,11 @@ public class LabelSlaveMonitor extends PeriodicWork {
     }
     
     protected void doRun() throws Exception {
+        if(labelsDAO == null || slavesDAO == null) {
+            //all().remove(this); // db is not set up, cannot record anything
+            return;
+        }
+        
     	Jenkins jenkins = Jenkins.getInstance();
     	List<BuildableItem> bis = jenkins.getQueue().getBuildableItems();
     	Set<Label> labels = jenkins.getLabels();
@@ -84,6 +89,22 @@ public class LabelSlaveMonitor extends PeriodicWork {
     	slavesDAO.create(sis);
     }
     
+    public void enable() {
+        MonitorUtils.enable(this, all());
+    }
     
-
+    public void disable() {
+        MonitorUtils.disable(this, all());
+    }
+    
+    public void load() throws UnknownHostException {
+        DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+        if(dbConfig == null) {
+            this.labelsDAO = null;
+            this.slavesDAO = null;
+            return;
+        }
+        this.labelsDAO = DAOFactory.getDAOFactory(dbConfig).getLabelsDAO();
+        this.slavesDAO = DAOFactory.getDAOFactory(dbConfig).getSlavesDAO();
+    }
 }

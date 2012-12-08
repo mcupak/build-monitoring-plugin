@@ -17,17 +17,17 @@ import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
 import org.jenkinsci.plugins.buildanalysis.model.GlobalInfo;
+import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 
 @Extension
 public class GlobalMonitor extends PeriodicWork {
 
     private static final int PERIOD_MINUTES = 1;
     
-    private final GlobalDAO globalDao;
+    private GlobalDAO globalDao;
     
     public GlobalMonitor() throws UnknownHostException {
-    	DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        this.globalDao = DAOFactory.getDAOFactory(dbConfig).getGlobalDAO();
+    	load();
     }
     
     public long getRecurrencePeriod() {
@@ -35,6 +35,11 @@ public class GlobalMonitor extends PeriodicWork {
     }
     
     protected void doRun() throws Exception {
+        if(globalDao == null) {
+            //all().remove(this); // db is not set up, cannot record anything
+            return;
+        }
+        
         GlobalInfo globalInfo = new GlobalInfo(new Date(System.currentTimeMillis()));
         Jenkins j = Jenkins.getInstance();
         
@@ -62,5 +67,23 @@ public class GlobalMonitor extends PeriodicWork {
         
         globalDao.create(globalInfo);
     }
+    
+    public void enable() {
+        MonitorUtils.enable(this, all());
+    }
+    
+    public void disable() {
+        MonitorUtils.disable(this, all());
+    }
+    
+    public void load()  throws UnknownHostException {
+        DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+        if(dbConfig == null) {
+            this.globalDao = null;
+            return;
+        }
+        this.globalDao = DAOFactory.getDAOFactory(dbConfig).getGlobalDAO();
+    }
+
 }
 

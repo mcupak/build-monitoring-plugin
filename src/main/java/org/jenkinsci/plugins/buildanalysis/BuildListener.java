@@ -6,6 +6,7 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.listeners.RunListener;
 
+import java.net.UnknownHostException;
 import java.util.Date;
 
 import jenkins.model.Jenkins;
@@ -16,18 +17,23 @@ import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
+import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 
 @Extension
 public class BuildListener extends RunListener<AbstractBuild<?,?>> {
 	
-    private final BuildDAO buildDAO;
+    private BuildDAO buildDAO;
     
-    public BuildListener() throws Exception {
-    	DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        this.buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
+    public BuildListener() throws UnknownHostException {
+    	load();
     }
     
     public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {
+        if(buildDAO == null) {
+            //unregister(); // db is not set up, cannot record anything
+            return;
+        }
+        
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getJobName(build), build.number);
         buildInfo.setClassName(build.getParent().getClass().getName());
         buildInfo.setStartedTime(build.getTime());
@@ -40,10 +46,30 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> {
     }
     
     public void onFinalized(AbstractBuild<?,?> build) {
+        if(buildDAO == null) {
+            //unregister(); // db is not set up, cannot record anything
+            return;
+        }
+        
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getJobName(build), build.number);
         buildInfo.setFinishedTime(new Date(System.currentTimeMillis()));
         buildInfo.setResult(build.getResult());
         buildDAO.updateOnFinalized(buildInfo);
+    }
+    
+    public void enable() {
+        MonitorUtils.enable(this, all());
+    }
+    
+    public void disable() {
+        MonitorUtils.disable(this, all());
+    }
+    
+    public void load() throws UnknownHostException {
+        DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+        if(dbConfig == null)
+            return;
+        this.buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
     }
 
 }
