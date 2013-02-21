@@ -1,5 +1,7 @@
 package org.jenkinsci.plugins.buildanalysis.dao;
 
+import net.sf.json.JSONArray;
+
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 
 public interface BuildDAO {
@@ -9,5 +11,7 @@ public interface BuildDAO {
     public void updateOnFinalized(BuildInfo build);
     public void getBuild(String jobName, int number);
     public void getBuilds(String jobName);
+    
+    public JSONArray getBuildTypes();
     
 }

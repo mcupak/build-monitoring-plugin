@@ -4,5 +4,7 @@
 				<!-- j:set var="instance" value="${instance.dbConfig}" / -->
 				<st:include page="config.jelly" class="org.jenkinsci.plugins.buildanalysis.dao.DbConfig" />
 		<!-- /f:entry -->
+        <f:validateButton method="enableMonitors" title="${%Enable monitors}" />
+        <f:validateButton method="disableMonitors" title="${%Disable monitors}" />
 	</f:section>
 </j:jelly>

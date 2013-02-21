@@ -5,6 +5,7 @@ import hudson.Plugin;
 import java.net.UnknownHostException;
 
 import jenkins.model.Jenkins;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
@@ -43,6 +44,12 @@ public class BuildAnalysisPlugin extends Plugin {
         series.put("queueSize", queueDAO.getQueueSizeSerie());
         
         return series;
+	}
+	
+	public JSONArray getBuildTypes() throws UnknownHostException {
+		DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+		BuildDAO buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
+        return buildDAO.getBuildTypes();
 	}
 
 }

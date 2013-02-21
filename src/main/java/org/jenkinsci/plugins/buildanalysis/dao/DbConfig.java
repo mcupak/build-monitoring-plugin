@@ -14,7 +14,7 @@ public class DbConfig implements Describable<DbConfig> {
 	private String password;
 
 	@DataBoundConstructor
-	public DbConfig(String host, String username, String password, String dbName) {
+	public DbConfig(String host, String dbName, String username, String password) {
 		System.out.println("DbConfig konstruktor");
 		this.hostname = host;
 		this.username = username;

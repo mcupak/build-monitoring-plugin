@@ -28,11 +28,13 @@ public class BuildAnalysis implements Describable<BuildAnalysis> {
 		@Override
 		public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
 			//TODO - smarter databinding, so far I wan't able to force jelly to incelude dbConfig JSON
-			//System.out.println("JSON: " + json.toString());
+			System.out.println("JSON: " + json.toString());
 			//dbConfig = req.bindJSON(DbConfig.class, json.getJSONObject("dbConfig"));
 			String host = json.getString("host");
 			String dbName = json.getString("dbName");
-			dbConfig = new DbConfig(host, dbName);
+			String dbLogin = json.getString("username");
+			String dbPassword = json.getString("password");
+			dbConfig = new DbConfig(host, dbName, dbLogin, dbPassword);
 			save();
 			return super.configure(req, json);
 		}
@@ -44,7 +46,7 @@ public class BuildAnalysis implements Describable<BuildAnalysis> {
 		public String getHost() {
 			if(dbConfig == null)
 				return "";
-			return dbConfig.getHost();
+			return dbConfig.getHostname();
 		}
 		
 		public String getDbName() {
@@ -53,9 +55,32 @@ public class BuildAnalysis implements Describable<BuildAnalysis> {
 			return dbConfig.getDbName();
 		}
 		
+		public String getUsername() {
+		    if(dbConfig == null)
+		        return "";
+	        return dbConfig.getUsername();
+	    }
+
+	    public String getPassword() {
+	        if(dbConfig == null)
+                return "";
+	        return dbConfig.getPassword();
+	    }
+
+		
 		public String getDisplayName() {
 			return "Build monitoring";
 		}
+		
+		public void doEnableMonitors() {
+	        System.out.println("Monitors enabled");
+	        GlobalMonitor gm = Jenkins.getInstance().getExtensionList(GlobalMonitor.class).get(0);
+	        if(gm != null) gm.enable();
+	    }
+	    
+	    public void doDisableMonitors() {
+	        System.out.println("Monotirs disabled");
+	    }
 		
 	}
 	

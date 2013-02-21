@@ -1,14 +1,15 @@
 package org.jenkinsci.plugins.buildanalysis.mongo;
 
-import hudson.util.IOUtils;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.json.JSONArray;
 
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
+import org.jenkinsci.plugins.buildanalysis.utils.MapReduceUtils;
+import org.jenkinsci.plugins.buildanalysis.utils.MapReduceUtils.MapReduceFunctions;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -95,6 +96,20 @@ public class MongoBuildDAO implements BuildDAO {
 		}
 	}
 
+	public JSONArray getBuildTypes() {
+		JSONArray buildTypes = new JSONArray();
+		MapReduceOutput mr = mrBuildTypes();
+    	for(DBObject o : mr.results()) {
+    		System.out.println("Builds: " + o);
+    		JSONArray typesPoint = new JSONArray();
+    		String type = o.get("_id")==null ? "Unknown" :  (String)o.get("_id");
+    		typesPoint.add(type);
+    		typesPoint.add(o.get("value"));
+    		buildTypes.add(typesPoint);
+    	}
+    	return buildTypes;
+	}
+	
 	/**
 	 * 
 	 * @param query
@@ -114,7 +129,7 @@ public class MongoBuildDAO implements BuildDAO {
 		return results;
 	}
 
-	private MapReduceOutput mapReduce() {
+	/*private MapReduceOutput mapReduce() {
 		String map = "";
 		String reduce = "";
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -133,6 +148,12 @@ public class MongoBuildDAO implements BuildDAO {
 			System.out.println("Values: " + o.get("value"));
 		}
 		return out;
-	}
+	}*/
 
+	
+	private MapReduceOutput mrBuildTypes() {
+		MapReduceFunctions mr = MapReduceUtils.getMapReduce(MongoDAOFactory.BUILDS_COLLECTION_NAME,"BuildType");
+		MapReduceOutput out = coll.mapReduce(mr.getMap(), mr.getReduce(), null, MapReduceCommand.OutputType.INLINE, null);
+    	return out;
+	}
 }
