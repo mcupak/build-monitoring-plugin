@@ -27,14 +27,7 @@ public class BuildAnalysis implements Describable<BuildAnalysis> {
 		
 		@Override
 		public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
-			//TODO - smarter databinding, so far I wan't able to force jelly to incelude dbConfig JSON
-			System.out.println("JSON: " + json.toString());
-			//dbConfig = req.bindJSON(DbConfig.class, json.getJSONObject("dbConfig"));
-			String host = json.getString("host");
-			String dbName = json.getString("dbName");
-			String dbLogin = json.getString("username");
-			String dbPassword = json.getString("password");
-			dbConfig = new DbConfig(host, dbName, dbLogin, dbPassword);
+			dbConfig = req.bindJSON(DbConfig.class, json.getJSONObject("dbConfig"));
 			save();
 			return super.configure(req, json);
 		}
@@ -42,31 +35,6 @@ public class BuildAnalysis implements Describable<BuildAnalysis> {
 		public DbConfig getDbConfig() {
 			return dbConfig;
 		}
-		
-		public String getHost() {
-			if(dbConfig == null)
-				return "";
-			return dbConfig.getHostname();
-		}
-		
-		public String getDbName() {
-			if(dbConfig == null)
-				return "";
-			return dbConfig.getDbName();
-		}
-		
-		public String getUsername() {
-		    if(dbConfig == null)
-		        return "";
-	        return dbConfig.getUsername();
-	    }
-
-	    public String getPassword() {
-	        if(dbConfig == null)
-                return "";
-	        return dbConfig.getPassword();
-	    }
-
 		
 		public String getDisplayName() {
 			return "Build monitoring";
