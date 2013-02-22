@@ -7,6 +7,7 @@ import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
+import org.jenkinsci.plugins.buildanalysis.monitor.GlobalMonitor;
 import org.kohsuke.stapler.StaplerRequest;
 
 public class BuildAnalysis implements Describable<BuildAnalysis> {

@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.buildanalysis;
+package org.jenkinsci.plugins.buildanalysis.monitor;
 
 import hudson.Extension;
 import hudson.model.Action;
@@ -12,6 +12,7 @@ import java.util.List;
 
 import jenkins.model.Jenkins;
 
+import org.jenkinsci.plugins.buildanalysis.BuildAnalysis;
 import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;

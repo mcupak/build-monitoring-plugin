@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.buildanalysis;
+package org.jenkinsci.plugins.buildanalysis.monitor;
 
 import hudson.Extension;
 import hudson.model.PeriodicWork;
@@ -14,6 +14,7 @@ import java.util.Set;
 
 import jenkins.model.Jenkins;
 
+import org.jenkinsci.plugins.buildanalysis.BuildAnalysis;
 import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
