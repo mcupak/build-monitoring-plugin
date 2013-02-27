@@ -17,18 +17,19 @@ import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
+import org.jenkinsci.plugins.buildanalysis.dao.MonitorDAO;
 import org.jenkinsci.plugins.buildanalysis.model.GlobalInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 
 @Extension
-public class GlobalMonitor extends PeriodicWork {
+public class GlobalMonitor extends PeriodicWork implements Monitor {
 
     private static final int PERIOD_MINUTES = 1;
     
     private GlobalDAO globalDao;
     
     public GlobalMonitor() throws UnknownHostException {
-    	load();
+    	this.globalDao = MonitorUtils.getDaoFactory().getGlobalDAO();
     }
     
     public long getRecurrencePeriod() {
@@ -75,15 +76,6 @@ public class GlobalMonitor extends PeriodicWork {
     
     public void disable() {
         MonitorUtils.disable(this, all());
-    }
-    
-    public void load()  throws UnknownHostException {
-        DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        if(dbConfig == null) {
-            this.globalDao = null;
-            return;
-        }
-        this.globalDao = DAOFactory.getDAOFactory(dbConfig).getGlobalDAO();
     }
 
 }

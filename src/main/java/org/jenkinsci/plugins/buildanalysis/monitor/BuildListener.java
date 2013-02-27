@@ -16,17 +16,19 @@ import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
+import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
+import org.jenkinsci.plugins.buildanalysis.dao.MonitorDAO;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 
 @Extension
-public class BuildListener extends RunListener<AbstractBuild<?,?>> {
+public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Monitor {
 	
     private BuildDAO buildDAO;
     
     public BuildListener() throws UnknownHostException {
-    	load();
+    	this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
     }
     
     public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {
@@ -64,13 +66,6 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> {
     
     public void disable() {
         MonitorUtils.disable(this, all());
-    }
-    
-    public void load() throws UnknownHostException {
-        DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        if(dbConfig == null)
-            return;
-        this.buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
     }
 
 }

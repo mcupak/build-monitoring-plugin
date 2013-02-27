@@ -17,6 +17,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MapReduceCommand;
 import com.mongodb.MapReduceOutput;
+import com.mongodb.WriteResult;
 
 public class MongoBuildDAO implements BuildDAO {
 
@@ -48,6 +49,8 @@ public class MongoBuildDAO implements BuildDAO {
 	}
 
 	public void updateOnStarted(BuildInfo build) {
+	    System.out.println("UPDATED on start");
+	    try{
 		BasicDBObject old = new BasicDBObject();
 		old.put(KEY_NUMBER, build.getNumber());
 		old.put(KEY_NAME, build.getName());
@@ -61,7 +64,13 @@ public class MongoBuildDAO implements BuildDAO {
 		doc.put(KEY_TRIGGER_CAUSES,
 				BuildUtils.convertCauses(build.getTriggerCauses()));
 		doc.put(KEY_PARAMETERS, build.getParameters());
-		coll.update(old, new BasicDBObject().append("$set", doc), true, false);
+		WriteResult wr = coll.update(old, new BasicDBObject().append("$set", doc), true, false);
+		System.out.println("Result:" + wr.toString());
+		System.out.println(wr.getError());
+	    } catch(Exception e) {
+	        System.out.println("VYJIMKA:");
+	        e.printStackTrace();
+	    }
 	}
 
 	public void updateOnFinalized(BuildInfo build) {

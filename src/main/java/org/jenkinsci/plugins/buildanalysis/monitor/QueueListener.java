@@ -17,17 +17,19 @@ import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
+import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
+import org.jenkinsci.plugins.buildanalysis.dao.MonitorDAO;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 
 @Extension
-public class QueueListener extends QueueDecisionHandler {
+public class QueueListener extends QueueDecisionHandler implements Monitor {
 	
     private BuildDAO buildDAO;
     
     public QueueListener() throws UnknownHostException {
-    	load();
+        this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {
@@ -49,13 +51,4 @@ public class QueueListener extends QueueDecisionHandler {
         MonitorUtils.disable(this, all());
     }
     
-    public void load() throws UnknownHostException {
-        DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        if(dbConfig == null) {
-            this.buildDAO = null;
-            return;
-        }
-        this.buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
-    }
- 
 }

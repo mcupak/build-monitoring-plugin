@@ -4,7 +4,7 @@ import net.sf.json.JSONObject;
 
 import org.jenkinsci.plugins.buildanalysis.model.GlobalInfo;
 
-public interface GlobalDAO {
+public interface GlobalDAO extends MonitorDAO {
     
     public void create(GlobalInfo globalInfo);
     public JSONObject getSeries();

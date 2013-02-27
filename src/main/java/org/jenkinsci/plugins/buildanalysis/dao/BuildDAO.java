@@ -4,7 +4,7 @@ import net.sf.json.JSONArray;
 
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 
-public interface BuildDAO {
+public interface BuildDAO extends MonitorDAO {
 
     public void create(BuildInfo build);
     public void updateOnStarted(BuildInfo build);

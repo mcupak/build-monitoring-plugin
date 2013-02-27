@@ -18,7 +18,9 @@ import org.jenkinsci.plugins.buildanalysis.BuildAnalysis;
 import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
+import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.LabelsDAO;
+import org.jenkinsci.plugins.buildanalysis.dao.MonitorDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.SlavesDAO;
 import org.jenkinsci.plugins.buildanalysis.model.LabelInfo;
 import org.jenkinsci.plugins.buildanalysis.model.LabelsInfo;
@@ -39,7 +41,8 @@ public class LabelSlaveMonitor extends PeriodicWork {
 	private SlavesDAO slavesDAO;
 	
 	public LabelSlaveMonitor() throws UnknownHostException {
-		load();
+	    this.labelsDAO = MonitorUtils.getDaoFactory().getLabelsDAO();
+        this.slavesDAO = MonitorUtils.getDaoFactory().getSlavesDAO();
 	}
 	
 	public long getRecurrencePeriod() {
@@ -97,15 +100,5 @@ public class LabelSlaveMonitor extends PeriodicWork {
     public void disable() {
         MonitorUtils.disable(this, all());
     }
-    
-    public void load() throws UnknownHostException {
-        DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        if(dbConfig == null) {
-            this.labelsDAO = null;
-            this.slavesDAO = null;
-            return;
-        }
-        this.labelsDAO = DAOFactory.getDAOFactory(dbConfig).getLabelsDAO();
-        this.slavesDAO = DAOFactory.getDAOFactory(dbConfig).getSlavesDAO();
-    }
+
 }

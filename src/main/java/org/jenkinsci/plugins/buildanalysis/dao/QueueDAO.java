@@ -4,7 +4,7 @@ import net.sf.json.JSONArray;
 
 import org.jenkinsci.plugins.buildanalysis.model.QueueInfo;
 
-public interface QueueDAO {
+public interface QueueDAO extends MonitorDAO {
 
     public void create(QueueInfo queueInfo);
     public void update(QueueInfo queueInfo);

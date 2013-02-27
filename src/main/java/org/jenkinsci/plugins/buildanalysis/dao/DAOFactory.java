@@ -1,15 +1,30 @@
 package org.jenkinsci.plugins.buildanalysis.dao;
 
-import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jenkinsci.plugins.buildanalysis.mongo.MongoDAOFactory;
 
-// TODO switch to Hibernate OGM once technical problems are solved. Then there's no need to DAO at all 
+// TODO switch to Hibernate OGM once technical problems are solved. Then there's no need to have DAO at all 
 public abstract class DAOFactory {
 	
-    public static DAOFactory getDAOFactory(DbConfig dbConfig) throws UnknownHostException {
+    /**
+     * 
+     * @param dbConfig
+     * @return DAOFactory for creating DOA objects.
+     */
+    public static DAOFactory getDAOFactory(DbConfig dbConfig) {
         // TODO implement as an extension point and return factory based on configuration
-        return new MongoDAOFactory(dbConfig);
+        
+        // default is this dummy class to avoid returning null
+        DAOFactory factory = null;
+        try {
+            //TODO select implementation base on dbConfig
+            factory = new MongoDAOFactory(dbConfig); 
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to create DAO factory for Mongo DB", e);
+        }
+        return factory;
     }
     
     public abstract GlobalDAO getGlobalDAO();
@@ -26,4 +41,6 @@ public abstract class DAOFactory {
     
     public abstract SlavesDAO getSlavesDAO();
     public abstract SlavesDAO getSlavesDAO(String collectionName);
+    
+    private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());
 }

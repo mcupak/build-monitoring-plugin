@@ -18,6 +18,8 @@ import org.jenkinsci.plugins.buildanalysis.BuildAnalysis;
 import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
+import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
+import org.jenkinsci.plugins.buildanalysis.dao.MonitorDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
 import org.jenkinsci.plugins.buildanalysis.model.QueueInfo;
 import org.jenkinsci.plugins.buildanalysis.model.QueueItemInfo;
@@ -25,7 +27,7 @@ import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 
 @Extension
-public class QueueMonitor extends PeriodicWork {
+public class QueueMonitor extends PeriodicWork implements Monitor {
 
 	//TODO make it configurable via Aperiodic work?
     private static final int PERIOD_MINUTES = 1;
@@ -33,9 +35,9 @@ public class QueueMonitor extends PeriodicWork {
     private QueueDAO queueDAO;
     
     public QueueMonitor() throws UnknownHostException {
-    	load();
+        this.queueDAO = MonitorUtils.getDaoFactory().getQueueDAO();
     }
-    
+
     public long getRecurrencePeriod() {
         return PERIOD_MINUTES * MIN;
     }
@@ -83,14 +85,5 @@ public class QueueMonitor extends PeriodicWork {
     public void disable() {
         MonitorUtils.disable(this, all());
     }
-    
-    public void load() throws UnknownHostException {
-        DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        if(dbConfig == null) {
-            this.queueDAO = null;
-            return;
-        }
-        this.queueDAO = DAOFactory.getDAOFactory(dbConfig).getQueueDAO();
-    }
-    
+
 }
