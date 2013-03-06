@@ -9,15 +9,7 @@ import hudson.model.listeners.RunListener;
 import java.net.UnknownHostException;
 import java.util.Date;
 
-import jenkins.model.Jenkins;
-
-import org.jenkinsci.plugins.buildanalysis.BuildAnalysis;
-import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
-import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
-import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
-import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
-import org.jenkinsci.plugins.buildanalysis.dao.MonitorDAO;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
@@ -29,14 +21,11 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
     
     public BuildListener() throws UnknownHostException {
     	this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
+    	if(this.buildDAO == null)
+    	    disable();
     }
     
     public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {
-        if(buildDAO == null) {
-            //unregister(); // db is not set up, cannot record anything
-            return;
-        }
-        
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getJobName(build), build.number);
         buildInfo.setClassName(build.getParent().getClass().getName());
         buildInfo.setStartedTime(build.getTime());
@@ -49,11 +38,6 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
     }
     
     public void onFinalized(AbstractBuild<?,?> build) {
-        if(buildDAO == null) {
-            //unregister(); // db is not set up, cannot record anything
-            return;
-        }
-        
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getJobName(build), build.number);
         buildInfo.setFinishedTime(new Date(System.currentTimeMillis()));
         buildInfo.setResult(build.getResult());

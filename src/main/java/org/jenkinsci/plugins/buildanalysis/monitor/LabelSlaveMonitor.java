@@ -14,13 +14,7 @@ import java.util.Set;
 
 import jenkins.model.Jenkins;
 
-import org.jenkinsci.plugins.buildanalysis.BuildAnalysis;
-import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
-import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
-import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
-import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.LabelsDAO;
-import org.jenkinsci.plugins.buildanalysis.dao.MonitorDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.SlavesDAO;
 import org.jenkinsci.plugins.buildanalysis.model.LabelInfo;
 import org.jenkinsci.plugins.buildanalysis.model.LabelsInfo;

@@ -1,6 +1,5 @@
 package org.jenkinsci.plugins.buildanalysis.monitor;
 
-import org.jenkinsci.plugins.buildanalysis.dao.MonitorDAO;
 
 
 public interface Monitor {

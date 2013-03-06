@@ -8,7 +8,6 @@ import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.dao.DummyDAOFactory;
-import org.jenkinsci.plugins.buildanalysis.monitor.Monitor;
 
 public class MonitorUtils {
 

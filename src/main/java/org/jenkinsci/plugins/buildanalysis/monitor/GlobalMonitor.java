@@ -12,12 +12,7 @@ import java.util.Date;
 
 import jenkins.model.Jenkins;
 
-import org.jenkinsci.plugins.buildanalysis.BuildAnalysis;
-import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor;
-import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
-import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
-import org.jenkinsci.plugins.buildanalysis.dao.MonitorDAO;
 import org.jenkinsci.plugins.buildanalysis.model.GlobalInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 
