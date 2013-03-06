@@ -13,7 +13,7 @@ public class MonitorUtils {
 
     public static <T> void enable(T monitor, ExtensionList<T> extensionList) {
         if(!extensionList.contains(monitor))
-            extensionList.add(monitor);
+            extensionList.add(0, monitor);
     }
     
     public static <T> void disable(T monitor, ExtensionList<T> extensionList) {
