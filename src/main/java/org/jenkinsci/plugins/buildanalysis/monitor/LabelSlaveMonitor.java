@@ -26,7 +26,7 @@ import org.jenkinsci.plugins.buildanalysis.utils.QueueUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.SlaveUtils;
 
 @Extension
-public class LabelSlaveMonitor extends PeriodicWork {
+public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
 
 	// TODO make it configurable via Aperiodic work?
 	private static final int PERIOD_MINUTES = 1;

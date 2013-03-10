@@ -1,0 +1,42 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+
+    <st:bind var="plugin" value="${it}"/> <!-- inside <script> element results into error -->
+    <script>
+        function doEnable(monitor) {
+            plugin.enableMonitor(monitor);
+            alert('Enabled:' + monitor);
+        }
+        function doDisable(monitor) {
+            plugin.disableMonitor(monitor);
+            alert('Disabled:' + monitor);
+        }
+    </script>
+
+    <l:layout title="${%Build Analysis - monitor status}"
+        secured="true">
+        <st:include page="sidepanel.jelly" />
+        <l:main-panel>
+            <h1>${%Monitor status}</h1>
+            <p>
+                <span style="color:red">
+                    <b>${it.errorMsg}</b>
+                </span>
+            </p>
+            <j:forEach var="status" items="${it.monitorStatus.entrySet()}">
+                Status of
+                <b>${status.key}</b>
+                is ${status.value}
+                <j:choose>
+                    <j:when test="${status.value.toBoolean()}">
+                        <input type="button" value="Disable" onclick="doDisable('${status.key}')" title="${%Disable monitor}" />
+                    </j:when>
+                    <j:otherwise>
+                        <input type="button" value="Enable" onclick="doEnable('${status.key}')" title="${%Enable monitor}" />
+                    </j:otherwise>
+                </j:choose>
+                <br />
+            </j:forEach>
+        </l:main-panel>
+    </l:layout>
+
+</j:jelly>

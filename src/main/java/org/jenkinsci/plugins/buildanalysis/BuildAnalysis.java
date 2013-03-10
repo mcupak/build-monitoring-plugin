@@ -41,16 +41,6 @@ public class BuildAnalysis implements Describable<BuildAnalysis> {
 			return "Build monitoring";
 		}
 		
-		public void doEnableMonitors() {
-	        System.out.println("Monitors enabled");
-	        GlobalMonitor gm = Jenkins.getInstance().getExtensionList(GlobalMonitor.class).get(0);
-	        if(gm != null) gm.enable();
-	    }
-	    
-	    public void doDisableMonitors() {
-	        System.out.println("Monotirs disabled");
-	    }
-		
 	}
 	
 }

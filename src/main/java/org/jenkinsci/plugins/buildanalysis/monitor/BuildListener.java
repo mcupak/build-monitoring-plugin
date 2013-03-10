@@ -1,6 +1,7 @@
 package org.jenkinsci.plugins.buildanalysis.monitor;
 
 import hudson.Extension;
+import hudson.ExtensionList;
 import hudson.model.TaskListener;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
@@ -8,6 +9,8 @@ import hudson.model.listeners.RunListener;
 
 import java.net.UnknownHostException;
 import java.util.Date;
+
+import jenkins.model.Jenkins;
 
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
@@ -19,13 +22,21 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
 	
     private BuildDAO buildDAO;
     
-    public BuildListener() throws UnknownHostException {
-    	this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
-    	if(this.buildDAO == null)
-    	    disable();
+    public BuildListener() {
+        try {
+            this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
+        } catch(Exception e) {
+            this.buildDAO = null;
+        }
     }
     
     public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {
+        if(this.buildDAO == null) {
+            System.out.println("Dsiabling BUILD MONITOR");
+            disable();
+            return;
+        }
+        System.out.println("Build monitor called!");
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getJobName(build), build.number);
         buildInfo.setClassName(build.getParent().getClass().getName());
         buildInfo.setStartedTime(build.getTime());
@@ -50,6 +61,10 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
     
     public void disable() {
         MonitorUtils.disable(this, all());
+    }
+    
+    public static ExtensionList<BuildListener> getExtensionList() {
+        return Jenkins.getInstance().getExtensionList(BuildListener.class);
     }
 
 }
