@@ -4,6 +4,7 @@ public enum MonitorStatus {
     
     RUNNING(true),
     STOPPED(false),
+    FAILED(false),
     UNKNOWN(false);
     
     private boolean isRunning;

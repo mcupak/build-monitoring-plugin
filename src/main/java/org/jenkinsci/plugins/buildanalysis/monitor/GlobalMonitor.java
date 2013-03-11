@@ -23,12 +23,15 @@ public class GlobalMonitor extends PeriodicWork implements Monitor {
     private static final int PERIOD_MINUTES = 1;
     
     private GlobalDAO globalDao;
+    private MonitorStatus status;
     
     public GlobalMonitor() {
         try {
             this.globalDao = MonitorUtils.getDaoFactory().getGlobalDAO();
+            this.status = MonitorStatus.RUNNING;
         } catch(Exception e) {
             globalDao = null;
+            this.status = MonitorStatus.FAILED;
         }
     }
     
@@ -37,9 +40,12 @@ public class GlobalMonitor extends PeriodicWork implements Monitor {
     }
     
     protected void doRun() throws Exception {
-        if(this.globalDao == null) {
-            LOGGER.warning("Disabling Global monitor, check other log recored for details");
-            disable();
+        if(globalDao == null) {
+            if(status == MonitorStatus.RUNNING) {
+                LOGGER.warning("Disabling Global monitor, check other log recored for details");
+                disable();
+                status = MonitorStatus.FAILED;
+            }
             return;
         }
         

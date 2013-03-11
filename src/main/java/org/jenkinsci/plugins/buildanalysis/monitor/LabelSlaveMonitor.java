@@ -31,6 +31,7 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
 
 	// TODO make it configurable via Aperiodic work?
 	private static final int PERIOD_MINUTES = 1;
+	private MonitorStatus status;
 
 	private LabelsDAO labelsDAO;
 	private SlavesDAO slavesDAO;
@@ -39,9 +40,11 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
 	    try {
 	        this.labelsDAO = MonitorUtils.getDaoFactory().getLabelsDAO();
 	        this.slavesDAO = MonitorUtils.getDaoFactory().getSlavesDAO();
+	        this.status = MonitorStatus.RUNNING;
 	    } catch(Exception e) {
 	        this.labelsDAO = null;
 	        this.slavesDAO = null;
+	        this.status = MonitorStatus.FAILED;
 	    }
 	}
 	
@@ -51,8 +54,11 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
     
     protected void doRun() throws Exception {
         if(this.labelsDAO == null || slavesDAO == null) {
-            LOGGER.warning("Disabling Label-slave monitor, check other log recored for details");
-            disable();
+            if(status == MonitorStatus.RUNNING) {
+                LOGGER.warning("Disabling Label-slave monitor, check other log recored for details");
+                disable();
+                status = MonitorStatus.FAILED;
+            }
             return;
         }
         

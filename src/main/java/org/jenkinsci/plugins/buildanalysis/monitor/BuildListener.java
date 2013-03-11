@@ -22,19 +22,25 @@ import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Monitor {
 	
     private BuildDAO buildDAO;
+    private MonitorStatus status;
     
     public BuildListener() {
         try {
             this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
+            this.status = MonitorStatus.RUNNING;
         } catch(Exception e) {
             this.buildDAO = null;
+            this.status = MonitorStatus.FAILED;
         }
     }
     
     public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {
         if(this.buildDAO == null) {
-            LOGGER.warning("Disabling Build listener monitor, check other log recored for details");
-            disable();
+            if(status == MonitorStatus.RUNNING) {
+                LOGGER.warning("Disabling Build listener monitor, check other log recored for details");
+                disable();
+                status = MonitorStatus.FAILED;
+            }
             return;
         }
         System.out.println("Build monitor called!");

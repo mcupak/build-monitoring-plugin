@@ -20,19 +20,25 @@ import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 public class QueueListener extends QueueDecisionHandler implements Monitor {
 	
     private BuildDAO buildDAO;
+    private MonitorStatus status;
     
     public QueueListener() {
         try {
             this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
+            this.status = MonitorStatus.RUNNING;
         } catch(Exception e) {
             this.buildDAO = null;
+            this.status = MonitorStatus.FAILED;
         }
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {
         if(this.buildDAO == null) {
-            LOGGER.warning("Disabling Queue listener monitor, check other log recored for details");
-            disable();
+            if(status == MonitorStatus.RUNNING) {
+                LOGGER.warning("Disabling Queue listener monitor, check other log recored for details");
+                disable();
+                status = MonitorStatus.FAILED;
+            }
             return true;
         }
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getProjectName((AbstractProject<?,?>)p), ((AbstractProject<?,?>)p).getNextBuildNumber());

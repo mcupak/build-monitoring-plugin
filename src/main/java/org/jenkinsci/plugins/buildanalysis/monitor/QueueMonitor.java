@@ -28,12 +28,15 @@ public class QueueMonitor extends PeriodicWork implements Monitor {
     private static final int PERIOD_MINUTES = 1;
     
     private QueueDAO queueDAO;
+    private MonitorStatus status;
     
     public QueueMonitor() {
         try {
             this.queueDAO = MonitorUtils.getDaoFactory().getQueueDAO();
+            this.status = MonitorStatus.RUNNING;
         } catch(Exception e) {
             this.queueDAO =  null;
+            this.status = MonitorStatus.FAILED;
         }
     }
 
@@ -43,8 +46,11 @@ public class QueueMonitor extends PeriodicWork implements Monitor {
     
     protected void doRun() throws Exception {
         if(this.queueDAO == null) {
-            LOGGER.warning("Disabling Queue monitor, check other log recored for details");
-            disable();
+            if(status == MonitorStatus.RUNNING) {
+                LOGGER.warning("Disabling Queue monitor, check other log recored for details");
+                disable();
+                status = MonitorStatus.FAILED;
+            }
             return;
         }
         
