@@ -16,7 +16,6 @@ public abstract class DAOFactory {
     public static DAOFactory getDAOFactory(DbConfig dbConfig) {
         // TODO implement as an extension point and return factory based on configuration
         
-        // default is this dummy class to avoid returning null
         DAOFactory factory = null;
         try {
             //TODO select implementation base on dbConfig
