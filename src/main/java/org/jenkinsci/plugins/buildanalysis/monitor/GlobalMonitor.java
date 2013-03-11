@@ -9,9 +9,11 @@ import hudson.model.Slave;
 
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import jenkins.model.Jenkins;
 
+import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
 import org.jenkinsci.plugins.buildanalysis.model.GlobalInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
@@ -32,8 +34,9 @@ public class GlobalMonitor extends PeriodicWork implements Monitor {
     }
     
     protected void doRun() throws Exception {
-        if(globalDao == null) {
-            //all().remove(this); // db is not set up, cannot record anything
+        if(this.globalDao == null) {
+            LOGGER.warning("Disabling Global monitor, check other log recored for details");
+            disable();
             return;
         }
         
@@ -72,6 +75,8 @@ public class GlobalMonitor extends PeriodicWork implements Monitor {
     public void disable() {
         MonitorUtils.disable(this, all());
     }
+    
+    private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());
 
 }
 

@@ -11,9 +11,11 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import jenkins.model.Jenkins;
 
+import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
 import org.jenkinsci.plugins.buildanalysis.model.QueueInfo;
 import org.jenkinsci.plugins.buildanalysis.model.QueueItemInfo;
@@ -37,8 +39,9 @@ public class QueueMonitor extends PeriodicWork implements Monitor {
     }
     
     protected void doRun() throws Exception {
-        if(queueDAO == null) {
-            //all().remove(this); // db is not set up, cannot record anything
+        if(this.queueDAO == null) {
+            LOGGER.warning("Disabling Queue monitor, check other log recored for details");
+            disable();
             return;
         }
         
@@ -79,5 +82,7 @@ public class QueueMonitor extends PeriodicWork implements Monitor {
     public void disable() {
         MonitorUtils.disable(this, all());
     }
+    
+    private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());
 
 }

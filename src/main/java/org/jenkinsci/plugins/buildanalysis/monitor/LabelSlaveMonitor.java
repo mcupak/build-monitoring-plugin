@@ -11,9 +11,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import jenkins.model.Jenkins;
 
+import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.LabelsDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.SlavesDAO;
 import org.jenkinsci.plugins.buildanalysis.model.LabelInfo;
@@ -44,8 +46,9 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
     }
     
     protected void doRun() throws Exception {
-        if(labelsDAO == null || slavesDAO == null) {
-            //all().remove(this); // db is not set up, cannot record anything
+        if(this.labelsDAO == null || slavesDAO == null) {
+            LOGGER.warning("Disabling Label-slave monitor, check other log recored for details");
+            disable();
             return;
         }
         
@@ -95,4 +98,5 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
         MonitorUtils.disable(this, all());
     }
 
+    private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());
 }

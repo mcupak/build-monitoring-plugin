@@ -9,8 +9,10 @@ import hudson.model.Queue.Task;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
+import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
@@ -25,8 +27,9 @@ public class QueueListener extends QueueDecisionHandler implements Monitor {
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {
-        if(buildDAO == null) {
-            //all().remove(this); // db is not set up, cannot record anything
+        if(this.buildDAO == null) {
+            LOGGER.warning("Disabling Queue listener monitor, check other log recored for details");
+            disable();
             return true;
         }
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getProjectName((AbstractProject<?,?>)p), ((AbstractProject<?,?>)p).getNextBuildNumber());
@@ -43,4 +46,5 @@ public class QueueListener extends QueueDecisionHandler implements Monitor {
         MonitorUtils.disable(this, all());
     }
     
+    private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());
 }

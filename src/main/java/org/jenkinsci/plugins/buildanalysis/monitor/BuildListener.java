@@ -7,12 +7,13 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.listeners.RunListener;
 
-import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import jenkins.model.Jenkins;
 
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
+import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.model.BuildInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
@@ -32,7 +33,7 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
     
     public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {
         if(this.buildDAO == null) {
-            System.out.println("Dsiabling BUILD MONITOR");
+            LOGGER.warning("Disabling Build listener monitor, check other log recored for details");
             disable();
             return;
         }
@@ -49,6 +50,11 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
     }
     
     public void onFinalized(AbstractBuild<?,?> build) {
+        if(this.buildDAO == null) {
+            LOGGER.warning("Disabling Build listener monitor, check other log recored for details");
+            disable();
+            return;
+        }
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getJobName(build), build.number);
         buildInfo.setFinishedTime(new Date(System.currentTimeMillis()));
         buildInfo.setResult(build.getResult());
@@ -67,4 +73,5 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
         return Jenkins.getInstance().getExtensionList(BuildListener.class);
     }
 
+    private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());
 }
