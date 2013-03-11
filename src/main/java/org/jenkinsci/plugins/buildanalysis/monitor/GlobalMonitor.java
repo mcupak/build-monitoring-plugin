@@ -7,7 +7,6 @@ import hudson.model.AbstractProject;
 import hudson.model.Node;
 import hudson.model.Slave;
 
-import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -25,8 +24,12 @@ public class GlobalMonitor extends PeriodicWork implements Monitor {
     
     private GlobalDAO globalDao;
     
-    public GlobalMonitor() throws UnknownHostException {
-    	this.globalDao = MonitorUtils.getDaoFactory().getGlobalDAO();
+    public GlobalMonitor() {
+        try {
+            this.globalDao = MonitorUtils.getDaoFactory().getGlobalDAO();
+        } catch(Exception e) {
+            globalDao = null;
+        }
     }
     
     public long getRecurrencePeriod() {

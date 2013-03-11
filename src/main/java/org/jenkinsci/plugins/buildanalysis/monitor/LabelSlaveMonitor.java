@@ -6,7 +6,6 @@ import hudson.model.Label;
 import hudson.model.Node;
 import hudson.model.Queue.BuildableItem;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,9 +35,14 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
 	private LabelsDAO labelsDAO;
 	private SlavesDAO slavesDAO;
 	
-	public LabelSlaveMonitor() throws UnknownHostException {
-	    this.labelsDAO = MonitorUtils.getDaoFactory().getLabelsDAO();
-        this.slavesDAO = MonitorUtils.getDaoFactory().getSlavesDAO();
+	public LabelSlaveMonitor() {
+	    try {
+	        this.labelsDAO = MonitorUtils.getDaoFactory().getLabelsDAO();
+	        this.slavesDAO = MonitorUtils.getDaoFactory().getSlavesDAO();
+	    } catch(Exception e) {
+	        this.labelsDAO = null;
+	        this.slavesDAO = null;
+	    }
 	}
 	
 	public long getRecurrencePeriod() {

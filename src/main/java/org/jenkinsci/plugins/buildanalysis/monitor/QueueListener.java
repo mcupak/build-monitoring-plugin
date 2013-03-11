@@ -6,7 +6,6 @@ import hudson.model.AbstractProject;
 import hudson.model.Queue.QueueDecisionHandler;
 import hudson.model.Queue.Task;
 
-import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -22,8 +21,12 @@ public class QueueListener extends QueueDecisionHandler implements Monitor {
 	
     private BuildDAO buildDAO;
     
-    public QueueListener() throws UnknownHostException {
-        this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
+    public QueueListener() {
+        try {
+            this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
+        } catch(Exception e) {
+            this.buildDAO = null;
+        }
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {

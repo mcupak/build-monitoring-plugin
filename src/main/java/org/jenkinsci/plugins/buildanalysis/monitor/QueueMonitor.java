@@ -7,7 +7,6 @@ import hudson.model.Queue;
 import hudson.model.Queue.Item;
 import hudson.model.Queue.Task;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,8 +29,12 @@ public class QueueMonitor extends PeriodicWork implements Monitor {
     
     private QueueDAO queueDAO;
     
-    public QueueMonitor() throws UnknownHostException {
-        this.queueDAO = MonitorUtils.getDaoFactory().getQueueDAO();
+    public QueueMonitor() {
+        try {
+            this.queueDAO = MonitorUtils.getDaoFactory().getQueueDAO();
+        } catch(Exception e) {
+            this.queueDAO =  null;
+        }
     }
 
     public long getRecurrencePeriod() {
