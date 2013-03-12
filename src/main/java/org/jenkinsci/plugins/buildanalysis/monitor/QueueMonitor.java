@@ -31,13 +31,7 @@ public class QueueMonitor extends PeriodicWork implements Monitor {
     private MonitorStatus status;
     
     public QueueMonitor() {
-        try {
-            this.queueDAO = MonitorUtils.getDaoFactory().getQueueDAO();
-            this.status = MonitorStatus.RUNNING;
-        } catch(Exception e) {
-            this.queueDAO =  null;
-            this.status = MonitorStatus.FAILED;
-        }
+        init();
     }
 
     public long getRecurrencePeriod() {
@@ -90,6 +84,16 @@ public class QueueMonitor extends PeriodicWork implements Monitor {
     
     public void disable() {
         MonitorUtils.disable(this, all());
+    }
+    
+    private void init() {
+        try {
+            this.queueDAO = MonitorUtils.getDaoFactory().getQueueDAO();
+            this.status = MonitorStatus.RUNNING;
+        } catch(Exception e) {
+            this.queueDAO =  null;
+            this.status = MonitorStatus.FAILED;
+        }
     }
     
     private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());

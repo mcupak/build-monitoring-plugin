@@ -1,7 +1,6 @@
 package org.jenkinsci.plugins.buildanalysis.monitor;
 
 import hudson.Extension;
-import hudson.ExtensionList;
 import hudson.model.TaskListener;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
@@ -9,8 +8,6 @@ import hudson.model.listeners.RunListener;
 
 import java.util.Date;
 import java.util.logging.Logger;
-
-import jenkins.model.Jenkins;
 
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
@@ -25,13 +22,7 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
     private MonitorStatus status;
     
     public BuildListener() {
-        try {
-            this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
-            this.status = MonitorStatus.RUNNING;
-        } catch(Exception e) {
-            this.buildDAO = null;
-            this.status = MonitorStatus.FAILED;
-        }
+       init(); 
     }
     
     public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {
@@ -75,8 +66,14 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
         MonitorUtils.disable(this, all());
     }
     
-    public static ExtensionList<BuildListener> getExtensionList() {
-        return Jenkins.getInstance().getExtensionList(BuildListener.class);
+    private void init() {
+        try {
+            this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
+            this.status = MonitorStatus.RUNNING;
+        } catch(Exception e) {
+            this.buildDAO = null;
+            this.status = MonitorStatus.FAILED;
+        }
     }
 
     private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());

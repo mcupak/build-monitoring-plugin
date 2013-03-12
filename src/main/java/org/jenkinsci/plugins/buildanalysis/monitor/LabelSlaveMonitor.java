@@ -37,15 +37,7 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
 	private SlavesDAO slavesDAO;
 	
 	public LabelSlaveMonitor() {
-	    try {
-	        this.labelsDAO = MonitorUtils.getDaoFactory().getLabelsDAO();
-	        this.slavesDAO = MonitorUtils.getDaoFactory().getSlavesDAO();
-	        this.status = MonitorStatus.RUNNING;
-	    } catch(Exception e) {
-	        this.labelsDAO = null;
-	        this.slavesDAO = null;
-	        this.status = MonitorStatus.FAILED;
-	    }
+	    init();
 	}
 	
 	public long getRecurrencePeriod() {
@@ -108,5 +100,17 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
         MonitorUtils.disable(this, all());
     }
 
+    private void init() {
+        try {
+            this.labelsDAO = MonitorUtils.getDaoFactory().getLabelsDAO();
+            this.slavesDAO = MonitorUtils.getDaoFactory().getSlavesDAO();
+            this.status = MonitorStatus.RUNNING;
+        } catch(Exception e) {
+            this.labelsDAO = null;
+            this.slavesDAO = null;
+            this.status = MonitorStatus.FAILED;
+        }
+    }
+    
     private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());
 }

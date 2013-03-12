@@ -26,13 +26,7 @@ public class GlobalMonitor extends PeriodicWork implements Monitor {
     private MonitorStatus status;
     
     public GlobalMonitor() {
-        try {
-            this.globalDao = MonitorUtils.getDaoFactory().getGlobalDAO();
-            this.status = MonitorStatus.RUNNING;
-        } catch(Exception e) {
-            globalDao = null;
-            this.status = MonitorStatus.FAILED;
-        }
+        init();
     }
     
     public long getRecurrencePeriod() {
@@ -83,6 +77,16 @@ public class GlobalMonitor extends PeriodicWork implements Monitor {
     
     public void disable() {
         MonitorUtils.disable(this, all());
+    }
+    
+    private void init() {
+        try {
+            this.globalDao = MonitorUtils.getDaoFactory().getGlobalDAO();
+            this.status = MonitorStatus.RUNNING;
+        } catch(Exception e) {
+            globalDao = null;
+            this.status = MonitorStatus.FAILED;
+        }
     }
     
     private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());

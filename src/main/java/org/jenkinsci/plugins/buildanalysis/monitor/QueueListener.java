@@ -23,13 +23,7 @@ public class QueueListener extends QueueDecisionHandler implements Monitor {
     private MonitorStatus status;
     
     public QueueListener() {
-        try {
-            this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
-            this.status = MonitorStatus.RUNNING;
-        } catch(Exception e) {
-            this.buildDAO = null;
-            this.status = MonitorStatus.FAILED;
-        }
+        init();
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {
@@ -53,6 +47,16 @@ public class QueueListener extends QueueDecisionHandler implements Monitor {
     
     public void disable() {
         MonitorUtils.disable(this, all());
+    }
+    
+    private void init() {
+        try {
+            this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
+            this.status = MonitorStatus.RUNNING;
+        } catch(Exception e) {
+            this.buildDAO = null;
+            this.status = MonitorStatus.FAILED;
+        }
     }
     
     private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());
