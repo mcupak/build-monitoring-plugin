@@ -1,11 +1,12 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
 
-<script type="text/javascript" src="/plugin/build-analysis/jqPlot/jquery.min.js"></script>
-<script type="text/javascript" src="/plugin/build-analysis/jqPlot/jquery.jqplot.min.js"></script>
-<script type="text/javascript" src="/plugin/build-analysis/jqPlot/plugins/jqplot.dateAxisRenderer.min.js"></script>
-<link class="include" rel="stylesheet" type="text/css" href="/plugin/build-analysis/jqPlot/jquery.jqplot.min.css" />
 
-<script type="text/javascript" src="/plugin/build-analysis/js/plottingFunctions.js"></script>
+<script type="text/javascript" src="${resURL}/plugin/build-analysis/jqPlot/jquery.min.js"></script>
+<script type="text/javascript" src="${resURL}/plugin/build-analysis/jqPlot/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="${resURL}/plugin/build-analysis/jqPlot/plugins/jqplot.dateAxisRenderer.min.js"></script>
+<link class="include" rel="stylesheet" type="text/css" href="${resURL}/plugin/build-analysis/jqPlot/jquery.jqplot.min.css" />
+
+<script type="text/javascript" src="${resURL}/plugin/build-analysis/js/plottingFunctions.js"></script>
 
 <script type="text/javascript" > <!-- jelly ${} needs to be in a separate tag that jquery tags -->
 var series = ${it.getGlobalSeries()};
@@ -23,7 +24,8 @@ $(document).ready(function() {
 });
 </script>
 	
-<l:layout title="${%Build Analysis}" secured="true">
+<l:layout title="${%Build Analysis}">
+
 	<st:include page="sidepanel.jelly" />
 	<l:main-panel>
 		<h1>${%Global statistics}</h1>
