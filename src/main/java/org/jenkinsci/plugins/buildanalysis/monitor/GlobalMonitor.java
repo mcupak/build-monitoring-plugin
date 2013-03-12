@@ -34,13 +34,14 @@ public class GlobalMonitor extends PeriodicWork implements Monitor {
     }
     
     protected void doRun() throws Exception {
-        if(globalDao == null) {
-            if(status == MonitorStatus.RUNNING) {
+        if(globalDao == null && status == MonitorStatus.RUNNING) {
+            init();
+            if(status != MonitorStatus.RUNNING) {
                 LOGGER.warning("Disabling Global monitor, check other log recored for details");
                 disable();
                 status = MonitorStatus.FAILED;
+                return;
             }
-            return;
         }
         
         GlobalInfo globalInfo = new GlobalInfo(new Date(System.currentTimeMillis()));

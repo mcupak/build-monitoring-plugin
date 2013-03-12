@@ -45,13 +45,14 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
     }
     
     protected void doRun() throws Exception {
-        if(this.labelsDAO == null || slavesDAO == null) {
-            if(status == MonitorStatus.RUNNING) {
+        if((this.labelsDAO == null || slavesDAO == null) && status == MonitorStatus.RUNNING) {
+            init();
+            if(status != MonitorStatus.RUNNING) {
                 LOGGER.warning("Disabling Label-slave monitor, check other log recored for details");
                 disable();
                 status = MonitorStatus.FAILED;
+                return;
             }
-            return;
         }
         
     	Jenkins jenkins = Jenkins.getInstance();

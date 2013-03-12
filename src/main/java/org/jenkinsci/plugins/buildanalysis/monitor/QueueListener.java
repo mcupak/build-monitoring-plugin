@@ -27,13 +27,14 @@ public class QueueListener extends QueueDecisionHandler implements Monitor {
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {
-        if(this.buildDAO == null) {
+        if(this.buildDAO == null && status == MonitorStatus.RUNNING) {
+            init();
             if(status == MonitorStatus.RUNNING) {
                 LOGGER.warning("Disabling Queue listener monitor, check other log recored for details");
                 disable();
                 status = MonitorStatus.FAILED;
+                return true;
             }
-            return true;
         }
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getProjectName((AbstractProject<?,?>)p), ((AbstractProject<?,?>)p).getNextBuildNumber());
         buildInfo.setScheduledTime(new Date(System.currentTimeMillis()));

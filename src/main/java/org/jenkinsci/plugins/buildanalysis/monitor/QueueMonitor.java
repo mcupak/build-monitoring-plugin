@@ -39,13 +39,14 @@ public class QueueMonitor extends PeriodicWork implements Monitor {
     }
     
     protected void doRun() throws Exception {
-        if(this.queueDAO == null) {
+        if(this.queueDAO == null && status == MonitorStatus.RUNNING){
+            init();
             if(status == MonitorStatus.RUNNING) {
                 LOGGER.warning("Disabling Queue monitor, check other log recored for details");
                 disable();
                 status = MonitorStatus.FAILED;
+                return;
             }
-            return;
         }
         
     	QueueInfo qi = new QueueInfo(new Date(System.currentTimeMillis()));

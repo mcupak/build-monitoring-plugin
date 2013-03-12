@@ -26,14 +26,17 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
     }
     
     public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {
-        if(this.buildDAO == null) {
-            if(status == MonitorStatus.RUNNING) {
+        if(this.buildDAO == null &&  status == MonitorStatus.RUNNING) {
+            init();  // retry to create DAO
+            if(status != MonitorStatus.RUNNING) {
                 LOGGER.warning("Disabling Build listener monitor, check other log recored for details");
                 disable();
                 status = MonitorStatus.FAILED;
+                return;
             }
-            return;
         }
+            
+        
         System.out.println("Build monitor called!");
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getJobName(build), build.number);
         buildInfo.setClassName(build.getParent().getClass().getName());
