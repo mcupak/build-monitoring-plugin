@@ -1,44 +1,47 @@
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson"
+    xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+
+    <l:layout title="${%Build Analysis}">
+
+        <script type="text/javascript"> <!-- jelly ${} needs to be in a separate tag that jquery tags -->
+            var series = ${it.getGlobalSeries()};
+        </script>
+
+        <script type="text/javascript" src="${resURL}/plugin/build-analysis/jqPlot/jquery.min.js"></script>
+        <script type="text/javascript" src="${resURL}/plugin/build-analysis/jqPlot/jquery.jqplot.min.js"></script>
+        <script type="text/javascript" src="${resURL}/plugin/build-analysis/jqPlot/plugins/jqplot.dateAxisRenderer.min.js"></script>
+        <link class="include" rel="stylesheet" type="text/css" href="${resURL}/plugin/build-analysis/jqPlot/jquery.jqplot.min.css" />
+
+        <script type="text/javascript" src="${resURL}/plugin/build-analysis/js/plottingFunctions.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $jq = jQuery.noConflict();
+                doDatePlot($jq, "Number of projects", "projects", series["projects"]);
+                doDatePlot($jq, "Number of builds", "builds", series["builds"]);
+                doDatePlot($jq, "Number of slaves", "slaves", series["slaves"]);
+                doDatePlot($jq, "Number of offline slaves", "offline", series["offline"]);
+                doDatePlot($jq, "Number of idle slaves", "idle", series["idle"]);
+                doDatePlot($jq, "Queue length", "queueSize", series["queueSize"]);
+            });
+        </script>
 
 
-<script type="text/javascript" src="${resURL}/plugin/build-analysis/jqPlot/jquery.min.js"></script>
-<script type="text/javascript" src="${resURL}/plugin/build-analysis/jqPlot/jquery.jqplot.min.js"></script>
-<script type="text/javascript" src="${resURL}/plugin/build-analysis/jqPlot/plugins/jqplot.dateAxisRenderer.min.js"></script>
-<link class="include" rel="stylesheet" type="text/css" href="${resURL}/plugin/build-analysis/jqPlot/jquery.jqplot.min.css" />
-
-<script type="text/javascript" src="${resURL}/plugin/build-analysis/js/plottingFunctions.js"></script>
-
-<script type="text/javascript" > <!-- jelly ${} needs to be in a separate tag that jquery tags -->
-var series = ${it.getGlobalSeries()};
-</script>
-
-<script type="text/javascript" >
-$(document).ready(function() {
-	$jq = jQuery.noConflict();
-	doDatePlot($jq, "Number of projects", "projects", series["projects"]);
-	doDatePlot($jq, "Number of builds", "builds", series["builds"]);
-	doDatePlot($jq, "Number of slaves", "slaves", series["slaves"]);
-	doDatePlot($jq, "Number of offline slaves", "offline", series["offline"]);
-	doDatePlot($jq, "Number of idle slaves", "idle", series["idle"]);
-	doDatePlot($jq, "Queue length", "queueSize", series["queueSize"]);
-});
-</script>
-	
-<l:layout title="${%Build Analysis}">
-
-	<st:include page="sidepanel.jelly" />
-	<l:main-panel>
-		<h1>${%Global statistics}</h1>
-       	<p>
-        	<span style="color:red"><b>${it.errorMsg}</b></span>
-        </p> 
-        <div id="projects" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
-        <div id="builds" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
-		<div id="slaves" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
-		<div id="offline" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
-		<div id="idle" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
-		<div id="queueSize" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
-	</l:main-panel>
-</l:layout>
+        <st:include page="sidepanel.jelly" />
+        <l:main-panel>
+            <h1>${%Global statistics}</h1>
+            <p>
+                <span style="color:red">
+                    <b>${it.errorMsg}</b>
+                </span>
+            </p>
+            <div id="projects" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
+            <div id="builds" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
+            <div id="slaves" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
+            <div id="offline" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
+            <div id="idle" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
+            <div id="queueSize" style="margin-top:20px; margin-left:20px; width:600px; height:300px;"></div>
+        </l:main-panel>
+    </l:layout>
 
 </j:jelly>
