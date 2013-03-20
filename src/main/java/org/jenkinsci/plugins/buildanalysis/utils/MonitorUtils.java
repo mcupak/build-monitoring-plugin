@@ -9,7 +9,6 @@ import org.jenkinsci.plugins.buildanalysis.BuildAnalysis.BuildAnalysisDescriptor
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.dao.DummyDAOFactory;
-import org.jenkinsci.plugins.buildanalysis.monitor.BuildListener;
 import org.jenkinsci.plugins.buildanalysis.monitor.Monitor;
 import org.jenkinsci.plugins.buildanalysis.monitor.MonitorStatus;
 
@@ -26,13 +25,10 @@ public class MonitorUtils {
             ExtensionList<T> el = (ExtensionList<T>)Jenkins.getInstance().getExtensionList(monitorClass.getSuperclass());
             for(T c : el)
                 if(c.getClass() == monitorClass) {
-                    System.out.println("Class tady je " + c.getClass());
                     return true;
                 }
-            System.out.println("Pridavam monitor");
             el.add(0, (T)monitorClass.newInstance());
         } catch(Exception e) {
-            System.out.println("EXCEPTION");
             e.printStackTrace();
             return false;
         }
@@ -48,11 +44,9 @@ public class MonitorUtils {
         try {
             Class<U> monitorClass = (Class<U>)Class.forName(className);
             ExtensionList<T> el = (ExtensionList<T>)Jenkins.getInstance().getExtensionList(monitorClass.getSuperclass());
-            System.out.println("EL SIZE: " + el.size());
             for(T c : el)
                 if(c.getClass() == monitorClass) 
                     el.remove(c);
-            System.out.println("EL SIZE AFTER: " + Jenkins.getInstance().getExtensionList(className).size());
         } catch(Exception e) {
             return false;
         }
@@ -84,10 +78,8 @@ public class MonitorUtils {
     }*/
     
     private static <T extends Monitor> MonitorStatus isEnabled(ExtensionList<T> extensionList) {
-        if(extensionList.size() > 0) {
-            System.out.println("extension point: " + extensionList.get(0).toString() + ", list size is " + extensionList.size());
+        if(extensionList.size() > 0)
             return MonitorStatus.RUNNING;
-        }
         return MonitorStatus.STOPPED;
     }
     
