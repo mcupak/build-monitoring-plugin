@@ -1,9 +1,12 @@
 package org.jenkinsci.plugins.buildanalysis.mongo;
 
+import java.util.logging.Logger;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
 import org.jenkinsci.plugins.buildanalysis.model.GlobalInfo;
 import org.jenkinsci.plugins.buildanalysis.utils.MapReduceUtils;
@@ -14,6 +17,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MapReduceCommand;
 import com.mongodb.MapReduceOutput;
+import com.mongodb.WriteResult;
 
 public class MongoGlobalDAO implements GlobalDAO {
 	
@@ -31,7 +35,9 @@ public class MongoGlobalDAO implements GlobalDAO {
 	}
 	
 	public void create(GlobalInfo globalInfo) {
-		coll.insert(getDbObject(globalInfo));
+		WriteResult wr = coll.insert(getDbObject(globalInfo));
+		if(wr.getError() != null)
+		    LOGGER.warning("Some problem with storing data into global collection:" + wr.getError());
 	}
 	
 	public void update(GlobalInfo globalInfo) {
@@ -108,5 +114,7 @@ public class MongoGlobalDAO implements GlobalDAO {
     	MapReduceOutput out = coll.mapReduce(mr.getMap(), mr.getReduce(), null, MapReduceCommand.OutputType.INLINE, null);
     	return out;
     }
+	
+	private static final Logger LOGGER = Logger.getLogger(DAOFactory.class.getName());
 	
 }
