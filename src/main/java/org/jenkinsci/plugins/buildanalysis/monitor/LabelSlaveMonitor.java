@@ -74,7 +74,12 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
     		lil.add(li);
     	}
     	lis.setLabels(lil);
-    	labelsDAO.create(lis);
+    	
+    	try {
+    	    labelsDAO.create(lis);
+    	} catch(Exception e) {
+            LOGGER.warning("Cannot create a label info record: " + e.getMessage());
+        }
     	
     	//store slaves
     	SlavesInfo sis = new SlavesInfo(new Date(System.currentTimeMillis()));
@@ -90,7 +95,12 @@ public class LabelSlaveMonitor extends PeriodicWork implements Monitor {
     		sil.add(si);
     	}
     	sis.setSlaves(sil);
-    	slavesDAO.create(sis);
+    	
+    	try {
+    	    slavesDAO.create(sis);
+    	} catch(Exception e) {
+            LOGGER.warning("Cannot create a slave info record: " + e.getMessage());
+        }
     }
     
     public void enable() {

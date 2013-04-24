@@ -69,7 +69,11 @@ public class GlobalMonitor extends PeriodicWork implements Monitor {
         globalInfo.setNumberOfOfflineSlaves(offlineNodes);
         globalInfo.setNumberOfIdleSlaves(idleNodes);
         
-        globalDao.create(globalInfo);
+        try {
+            globalDao.create(globalInfo);
+        } catch(Exception e) {
+            LOGGER.warning("Cannot create a global info record: " + e.getMessage());
+        }
     }
     
     public void enable() {

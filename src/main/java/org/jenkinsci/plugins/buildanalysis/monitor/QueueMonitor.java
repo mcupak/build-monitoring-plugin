@@ -74,8 +74,12 @@ public class QueueMonitor extends PeriodicWork implements Monitor {
     		qItems.add(qItem);
     	}
     	qi.setQueueList(qItems);
-
-    	queueDAO.create(qi); //TODO think if better to store new record every time or do some update or store e.g. some delta 
+    	
+    	try {
+    	    queueDAO.create(qi); //TODO think if better to store new record every time or do some update or store e.g. some delta
+    	} catch(Exception e) {
+            LOGGER.warning("Cannot create a queue info record: " + e.getMessage());
+        }
     }
     
     

@@ -38,7 +38,11 @@ public class QueueListener extends QueueDecisionHandler implements Monitor {
         }
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getProjectName((AbstractProject<?,?>)p), ((AbstractProject<?,?>)p).getNextBuildNumber());
         buildInfo.setScheduledTime(new Date(System.currentTimeMillis()));
-        buildDAO.create(buildInfo);
+        try {
+            buildDAO.create(buildInfo);
+        } catch(Exception e) {
+            LOGGER.warning("Cannot create a build info record: " + e.getMessage());
+        }
         return true;
     }
     

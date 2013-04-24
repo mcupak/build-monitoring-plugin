@@ -46,7 +46,12 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
         buildInfo.setBuildOn(BuildUtils.getBuildOn(build));
         buildInfo.setTriggerCauses(build.getCauses());
         buildInfo.setParameters(BuildUtils.getParameters(build));
-        buildDAO.updateOnStarted(buildInfo);
+        
+        try {
+            buildDAO.updateOnStarted(buildInfo);
+        } catch(Exception e) {
+            LOGGER.warning("Cannot update a build info record: " + e.getMessage());
+        }
     }
     
     public void onFinalized(AbstractBuild<?,?> build) {
@@ -58,7 +63,12 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getJobName(build), build.number);
         buildInfo.setFinishedTime(new Date(System.currentTimeMillis()));
         buildInfo.setResult(build.getResult());
-        buildDAO.updateOnFinalized(buildInfo);
+        
+        try {
+            buildDAO.updateOnFinalized(buildInfo);
+        } catch(Exception e) {
+            LOGGER.warning("Cannot update a build info record: " + e.getMessage());
+        }
     }
     
     public void enable() {
