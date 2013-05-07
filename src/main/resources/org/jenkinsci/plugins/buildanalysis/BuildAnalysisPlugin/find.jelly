@@ -1,0 +1,41 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson"
+    xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+
+    <script type="text/javascript" src="${resURL}/plugin/build-analysis/jqPlot/jquery.min.js"></script>
+
+    <script type="text/javascript"> <!-- jelly ${} needs to be in a separate tag that jquery tags -->
+        var data = ${it.doRunQuery()};
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $jq = jQuery.noConflict();
+            var table = "";
+            $jq.each(data, function() {
+                var tr = "";
+                $jq.each(this, function(k , v) {
+                    if(k == "name")
+                        tr += "<td>"+v+"</td>";
+                })
+                table += "<tr>"+tr+"</tr>";
+            })
+            $jq("#results").html(table);
+        });
+    </script>
+
+    <l:layout title="${%Build Analysis query}">
+
+
+        <st:include page="sidepanel.jelly" />
+        <l:main-panel>
+            <h3>Results from find() test</h3>
+            ${it.doRunQuery()}
+            <h3>table:</h3>
+            <table border="1">
+                <div id="results"></div>
+            </table>
+        </l:main-panel>
+
+    </l:layout>
+
+</j:jelly>

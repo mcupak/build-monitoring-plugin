@@ -16,6 +16,7 @@ import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
+import org.jenkinsci.plugins.buildanalysis.mongo.MongoBuildDAO;
 import org.jenkinsci.plugins.buildanalysis.monitor.BuildListener;
 import org.jenkinsci.plugins.buildanalysis.monitor.GlobalMonitor;
 import org.jenkinsci.plugins.buildanalysis.monitor.LabelSlaveMonitor;
@@ -60,6 +61,12 @@ public class BuildAnalysisPlugin extends Plugin {
 		DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
 		BuildDAO buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
         return buildDAO.getBuildTypes();
+	}
+	
+	public String doRunQuery() {
+	    DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+        MongoBuildDAO buildDAO = (MongoBuildDAO)DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
+        return buildDAO.find();
 	}
 	
 	public Map<String, MonitorStatus> getMonitorStatus() {
