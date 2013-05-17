@@ -27,6 +27,10 @@ public class QueueListener extends QueueDecisionHandler implements Monitor {
     }
     
     public boolean shouldSchedule(Task p, List<Action> actions) {
+        if(!(p instanceof AbstractProject<?,?>))  // first check if we can handle this task
+            return true;
+        //TODO handle these unknown types somehow (and do we actually want to collect info about these builds?)
+        
         if(this.buildDAO == null && status == MonitorStatus.RUNNING) {
             init();
             if(status == MonitorStatus.RUNNING) {
