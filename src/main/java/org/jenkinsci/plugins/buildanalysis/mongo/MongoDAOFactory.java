@@ -13,6 +13,7 @@ import org.jenkinsci.plugins.buildanalysis.dao.SlavesDAO;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 
 public class MongoDAOFactory extends DAOFactory {
@@ -23,13 +24,13 @@ public class MongoDAOFactory extends DAOFactory {
 	public static final String LABEL_COLLECTION_NAME = "labels";
 	public static final String SLAVE_COLLECTION_NAME = "slaves";
 	
-	private final Mongo mongo;
+	private final MongoClient mongo;
     private final DB db;
 	
 	public MongoDAOFactory(DbConfig dbConfig) throws UnknownHostException, MongoException, IllegalArgumentException {
 	    if(dbConfig == null)
 	        throw new IllegalArgumentException("Database configuration cannot be null");
-		this.mongo = new Mongo(dbConfig.getHostname());
+		this.mongo = new MongoClient(dbConfig.getHostname());
 		this.db = mongo.getDB(dbConfig.getDbName());
 		db.authenticate(dbConfig.getUsername(), dbConfig.getPassword().toCharArray());
 	}
