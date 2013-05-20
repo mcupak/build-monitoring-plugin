@@ -12,7 +12,6 @@ import org.jenkinsci.plugins.buildanalysis.dao.SlavesDAO;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 
