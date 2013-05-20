@@ -4,7 +4,6 @@ import java.net.UnknownHostException;
 
 import org.jenkinsci.plugins.buildanalysis.dao.BuildDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.DAOFactory;
-import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.LabelsDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
@@ -12,7 +11,6 @@ import org.jenkinsci.plugins.buildanalysis.dao.SlavesDAO;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 
 public class MongoDAOFactory extends DAOFactory {
@@ -23,15 +21,12 @@ public class MongoDAOFactory extends DAOFactory {
 	public static final String LABEL_COLLECTION_NAME = "labels";
 	public static final String SLAVE_COLLECTION_NAME = "slaves";
 	
-	private final MongoClient mongo;
     private final DB db;
 	
-	public MongoDAOFactory(DbConfig dbConfig) throws UnknownHostException, MongoException, IllegalArgumentException {
-	    if(dbConfig == null)
-	        throw new IllegalArgumentException("Database configuration cannot be null");
-		this.mongo = new MongoClient(dbConfig.getHostname());
-		this.db = mongo.getDB(dbConfig.getDbName());
-		db.authenticate(dbConfig.getUsername(), dbConfig.getPassword().toCharArray());
+	public MongoDAOFactory(DB db) throws UnknownHostException, MongoException, IllegalArgumentException {
+	    if(db == null)
+	        throw new IllegalArgumentException("DB is null");
+		this.db = db;
 	}
 	
 	public GlobalDAO getGlobalDAO() {

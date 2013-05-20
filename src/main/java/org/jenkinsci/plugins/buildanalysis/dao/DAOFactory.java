@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jenkinsci.plugins.buildanalysis.mongo.MongoDAOFactory;
+import org.jenkinsci.plugins.buildanalysis.mongo.MongoDB;
 
 // TODO switch to Hibernate OGM once technical problems are solved. Then there's no need to have DAO at all 
 public abstract class DAOFactory {
@@ -19,7 +20,7 @@ public abstract class DAOFactory {
         DAOFactory factory = null;
         try {
             //TODO select implementation base on dbConfig
-            factory = new MongoDAOFactory(dbConfig); 
+            factory = new MongoDAOFactory(MongoDB.getInstance()); 
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Failed to create DAO factory for Mongo DB", e);
         }

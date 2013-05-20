@@ -7,7 +7,7 @@ import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 
 import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
-import org.jenkinsci.plugins.buildanalysis.monitor.GlobalMonitor;
+import org.jenkinsci.plugins.buildanalysis.mongo.MongoDB;
 import org.kohsuke.stapler.StaplerRequest;
 
 public class BuildAnalysis implements Describable<BuildAnalysis> {
@@ -29,6 +29,7 @@ public class BuildAnalysis implements Describable<BuildAnalysis> {
 		@Override
 		public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
 			dbConfig = req.bindJSON(DbConfig.class, json.getJSONObject("dbConfig"));
+			MongoDB.init(dbConfig); //TODO select implementation base on dbConfig
 			save();
 			return super.configure(req, json);
 		}

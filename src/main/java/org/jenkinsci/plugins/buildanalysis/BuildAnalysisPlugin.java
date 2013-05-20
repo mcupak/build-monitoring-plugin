@@ -17,6 +17,7 @@ import org.jenkinsci.plugins.buildanalysis.dao.DbConfig;
 import org.jenkinsci.plugins.buildanalysis.dao.GlobalDAO;
 import org.jenkinsci.plugins.buildanalysis.dao.QueueDAO;
 import org.jenkinsci.plugins.buildanalysis.mongo.MongoBuildDAO;
+import org.jenkinsci.plugins.buildanalysis.mongo.MongoDB;
 import org.jenkinsci.plugins.buildanalysis.monitor.BuildListener;
 import org.jenkinsci.plugins.buildanalysis.monitor.GlobalMonitor;
 import org.jenkinsci.plugins.buildanalysis.monitor.LabelSlaveMonitor;
@@ -35,6 +36,10 @@ import org.kohsuke.stapler.bind.JavaScriptMethod;
  *
  */
 public class BuildAnalysisPlugin extends Plugin {
+    
+    public void postInitialize() {
+        MongoDB.init(((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig());
+    }
 	
 	public void doQuery(StaplerRequest req, StaplerResponse res) throws UnknownHostException {
         DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
