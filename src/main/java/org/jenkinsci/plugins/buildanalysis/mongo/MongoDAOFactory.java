@@ -26,7 +26,7 @@ public class MongoDAOFactory extends DAOFactory {
 	public MongoDAOFactory(DB db) throws UnknownHostException, MongoException, IllegalArgumentException {
 	    if(db == null)
 	        throw new IllegalArgumentException("DB is null");
-		this.db = db;
+	    this.db = db;
 	}
 	
 	public GlobalDAO getGlobalDAO() {
