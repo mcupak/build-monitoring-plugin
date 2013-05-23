@@ -14,7 +14,6 @@ import org.jenkinsci.plugins.buildanalysis.utils.MapReduceUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.MapReduceUtils.MapReduceFunctions;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
