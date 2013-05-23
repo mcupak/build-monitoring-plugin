@@ -2,9 +2,13 @@ package org.jenkinsci.plugins.buildanalysis;
 
 import hudson.Plugin;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.ServletException;
 
 import jenkins.model.Jenkins;
 import net.sf.json.JSONArray;
@@ -25,6 +29,7 @@ import org.jenkinsci.plugins.buildanalysis.monitor.MonitorStatus;
 import org.jenkinsci.plugins.buildanalysis.monitor.QueueListener;
 import org.jenkinsci.plugins.buildanalysis.monitor.QueueMonitor;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
+import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
@@ -41,10 +46,19 @@ public class BuildAnalysisPlugin extends Plugin {
         MongoDB.init(((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig());
     }
 	
-	public void doQuery(StaplerRequest req, StaplerResponse res) throws UnknownHostException {
-        DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        BuildDAO buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
-        buildDAO.getBuilds("test-matrix");
+	public void doQuery(StaplerRequest req, StaplerResponse res) throws IOException, ServletException {
+	    String dbQuery = req.getParameter("dbQuery");
+        if (dbQuery != null) {
+            if (!"POST".equals(req.getMethod())) {
+                throw HttpResponses.error(HttpURLConnection.HTTP_BAD_METHOD, "requires POST");
+            }
+            DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+            BuildDAO buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
+            //TODO try-catch
+            req.setAttribute("result", buildDAO.dbQuery(dbQuery));
+        }
+
+        req.getView(this, "dbquery.jelly").forward(req, res);
 	}
 	
 	
@@ -86,7 +100,7 @@ public class BuildAnalysisPlugin extends Plugin {
 	    }
 	    return statuses;
 	}
-
+ 	
 	@JavaScriptMethod
 	public void enableMonitor(String monitorClassStr) {
 	    System.out.println("Enableing monitor " + monitorClassStr);

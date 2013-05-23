@@ -1,0 +1,25 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson"
+    xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+
+    <l:layout title="${%Build Analysis query}">
+        <st:include page="sidepanel.jelly" />
+        <l:main-panel>
+            <h3>Run query</h3>
+            <form action="query" method="post">
+                <textarea id="dbQuery" name="dbQuery" class="script">${request.getParameter('dbQuery')}</textarea>
+                <div align="right">
+                    <f:submit value="${%Run}" />
+                </div>
+            </form>
+            <st:adjunct includes="org.kohsuke.stapler.codemirror.mode.clike.clike" />
+            <st:adjunct includes="org.kohsuke.stapler.codemirror.theme.default" />
+            <j:if test="${result!=null}">
+                <h2>${%Run}</h2>
+                <pre>
+                    <st:out value="${result}"/>
+                </pre>
+            </j:if>
+        </l:main-panel>
+    </l:layout>
+    
+</j:jelly>

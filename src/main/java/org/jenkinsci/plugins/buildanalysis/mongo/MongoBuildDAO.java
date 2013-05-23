@@ -164,4 +164,10 @@ public class MongoBuildDAO implements BuildDAO {
         List<DBObject> res = coll.find(query).toArray();
         return JSON.serialize(res);
     }
+    
+    public List<DBObject> dbQuery(String queryString) {
+        DBObject query = QueryBuilder.start(KEY_NAME).in(queryString.split(",")).get();
+        List<DBObject> res = coll.find(query).toArray();
+        return res;
+    }
 }
