@@ -36,79 +36,78 @@ import org.kohsuke.stapler.bind.JavaScriptMethod;
 
 /**
  * So far dummy class which server static content
- * 
+ *
  * @author vjuranek
  *
  */
 public class BuildAnalysisPlugin extends Plugin {
-    
+
     public void postInitialize() {
-        MongoDB.init(((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig());
+        MongoDB.init(((BuildAnalysisDescriptor) Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig());
     }
-	
-	public void doQuery(StaplerRequest req, StaplerResponse res) throws IOException, ServletException {
-	    String dbQuery = req.getParameter("dbQuery");
+
+    public void doQuery(StaplerRequest req, StaplerResponse res) throws IOException, ServletException {
+        String dbQuery = req.getParameter("dbQuery");
         if (dbQuery != null) {
             if (!"POST".equals(req.getMethod())) {
                 throw HttpResponses.error(HttpURLConnection.HTTP_BAD_METHOD, "requires POST");
             }
-            DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+            DbConfig dbConfig = ((BuildAnalysisDescriptor) Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
             BuildDAO buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
             //TODO try-catch
             req.setAttribute("result", buildDAO.dbQuery(dbQuery));
         }
 
         req.getView(this, "dbquery.jelly").forward(req, res);
-	}
-	
-	
-	public JSONObject getGlobalSeries() throws UnknownHostException {
-		DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-		
-		//global statistics
-		GlobalDAO globalDAO = DAOFactory.getDAOFactory(dbConfig).getGlobalDAO();
+    }
+
+    public JSONObject getGlobalSeries() throws UnknownHostException {
+        DbConfig dbConfig = ((BuildAnalysisDescriptor) Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+
+        //global statistics
+        GlobalDAO globalDAO = DAOFactory.getDAOFactory(dbConfig).getGlobalDAO();
         JSONObject series = globalDAO.getSeries();
-        
+
         //queue length
         QueueDAO queueDAO = DAOFactory.getDAOFactory(dbConfig).getQueueDAO();
         series.put("queueSize", queueDAO.getQueueSizeSerie());
-        
-        return series;
-	}
-	
-	public JSONArray getBuildTypes() throws UnknownHostException {
-		DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-		BuildDAO buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
-        return buildDAO.getBuildTypes();
-	}
-	
-	public String doRunQuery() {
-	    DbConfig dbConfig = ((BuildAnalysisDescriptor)Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
-        MongoBuildDAO buildDAO = (MongoBuildDAO)DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
-        return buildDAO.find();
-	}
-	
-	public Map<String, MonitorStatus> getMonitorStatus() {
-	    Map<String, MonitorStatus> statuses = new HashMap<String, MonitorStatus>();
-	    statuses.put(BuildListener.class.getName(), MonitorUtils.isEnabled(BuildListener.class));
-	    statuses.put(GlobalMonitor.class.getName(), MonitorUtils.isEnabled(GlobalMonitor.class));
-	    statuses.put(LabelSlaveMonitor.class.getName(), MonitorUtils.isEnabled(LabelSlaveMonitor.class));
-	    statuses.put(QueueListener.class.getName(), MonitorUtils.isEnabled(QueueListener.class));
-	    statuses.put(QueueMonitor.class.getName(), MonitorUtils.isEnabled(QueueMonitor.class));
-	    for(Map.Entry<String, MonitorStatus> entry : statuses.entrySet()) {
-	        System.out.println("Status of " + entry.getKey() + " is " + entry.getValue());
-	    }
-	    return statuses;
-	}
- 	
-	@JavaScriptMethod
-	public void enableMonitor(String monitorClassStr) {
-	    System.out.println("Enableing monitor " + monitorClassStr);
-	    MonitorUtils.enable(monitorClassStr);
-	}
 
-	@JavaScriptMethod
-	public void disableMonitor(String monitorClassStr) {
+        return series;
+    }
+
+    public JSONArray getBuildTypes() throws UnknownHostException {
+        DbConfig dbConfig = ((BuildAnalysisDescriptor) Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+        BuildDAO buildDAO = DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
+        return buildDAO.getBuildTypes();
+    }
+
+    public String doRunQuery() {
+        DbConfig dbConfig = ((BuildAnalysisDescriptor) Jenkins.getInstance().getDescriptor(BuildAnalysis.class)).getDbConfig();
+        MongoBuildDAO buildDAO = (MongoBuildDAO) DAOFactory.getDAOFactory(dbConfig).getBuildDAO();
+        return buildDAO.find();
+    }
+
+    public Map<String, MonitorStatus> getMonitorStatus() {
+        Map<String, MonitorStatus> statuses = new HashMap<String, MonitorStatus>();
+        statuses.put(BuildListener.class.getName(), MonitorUtils.isEnabled(BuildListener.class));
+        statuses.put(GlobalMonitor.class.getName(), MonitorUtils.isEnabled(GlobalMonitor.class));
+        statuses.put(LabelSlaveMonitor.class.getName(), MonitorUtils.isEnabled(LabelSlaveMonitor.class));
+        statuses.put(QueueListener.class.getName(), MonitorUtils.isEnabled(QueueListener.class));
+        statuses.put(QueueMonitor.class.getName(), MonitorUtils.isEnabled(QueueMonitor.class));
+        for (Map.Entry<String, MonitorStatus> entry : statuses.entrySet()) {
+            System.out.println("Status of " + entry.getKey() + " is " + entry.getValue());
+        }
+        return statuses;
+    }
+
+    @JavaScriptMethod
+    public void enableMonitor(String monitorClassStr) {
+        System.out.println("Enableing monitor " + monitorClassStr);
+        MonitorUtils.enable(monitorClassStr);
+    }
+
+    @JavaScriptMethod
+    public void disableMonitor(String monitorClassStr) {
         System.out.println("Disableing monitor " + monitorClassStr);
         MonitorUtils.disable(monitorClassStr);
     }

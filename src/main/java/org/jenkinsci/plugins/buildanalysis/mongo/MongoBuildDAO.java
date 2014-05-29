@@ -123,9 +123,8 @@ public class MongoBuildDAO implements BuildDAO {
     }
 
     /**
-     * 
-     * @param query
-     *            to be executed
+     *
+     * @param query to be executed
      * @return {@link List} of search results, can be empty but never null
      */
     private List<DBObject> doQuery(BasicDBObject query) {
@@ -150,7 +149,6 @@ public class MongoBuildDAO implements BuildDAO {
      * MapReduceOutput out = coll.mapReduce(map, reduce, null, MapReduceCommand.OutputType.INLINE, null); for (DBObject
      * o : out.results()) { System.out.println("Values: " + o.get("value")); } return out; }
      */
-
     private MapReduceOutput mrBuildTypes() {
         MapReduceFunctions mr = MapReduceUtils.getMapReduce(MongoDAOFactory.BUILDS_COLLECTION_NAME, "BuildType");
         MapReduceOutput out = coll.mapReduce(mr.getMap(), mr.getReduce(), null, MapReduceCommand.OutputType.INLINE,
@@ -164,7 +162,7 @@ public class MongoBuildDAO implements BuildDAO {
         List<DBObject> res = coll.find(query).toArray();
         return JSON.serialize(res);
     }
-    
+
     public List<DBObject> dbQuery(String queryString) {
         DBObject query = QueryBuilder.start(KEY_NAME).in(queryString.split(",")).get();
         List<DBObject> res = coll.find(query).toArray();

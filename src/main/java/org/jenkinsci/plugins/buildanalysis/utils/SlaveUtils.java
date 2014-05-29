@@ -8,12 +8,12 @@ import java.util.Set;
 
 public class SlaveUtils {
 
-	public static List<String> getSlaveNames(Set<Node> nodes) {
-		List<String> slaves = new ArrayList<String>();
-		for(Node n : nodes) {
-			slaves.add(n.getDisplayName());
-		}
-		return slaves;
-	}
-	
+    public static List<String> getSlaveNames(Set<Node> nodes) {
+        List<String> slaves = new ArrayList<String>();
+        for (Node n : nodes) {
+            slaves.add(n.getDisplayName());
+        }
+        return slaves;
+    }
+
 }

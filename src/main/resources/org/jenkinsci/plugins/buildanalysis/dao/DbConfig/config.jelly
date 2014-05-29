@@ -1,17 +1,17 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-	<f:rowSet name="dbConfig">
-	    <j:set var="instance" value="${instance.dbConfig}" />
-		<f:entry title="Hostname" field="hostname" description="Hostname of database server">
-			<f:textbox />
-		</f:entry>
-		<f:entry title="DB name" field="dbName" description="Databatse name where the data willl be stored">
-			<f:textbox />
-		</f:entry>
-		<f:entry title="Username" field="username" description="Username">
+    <f:rowSet name="dbConfig">
+        <j:set var="instance" value="${instance.dbConfig}" />
+        <f:entry title="Hostname" field="hostname" description="Hostname of database server">
+            <f:textbox />
+        </f:entry>
+        <f:entry title="DB name" field="dbName" description="Databatse name where the data willl be stored">
+            <f:textbox />
+        </f:entry>
+        <f:entry title="Username" field="username" description="Username">
             <f:textbox />
         </f:entry>
         <f:entry title="Password" field="password" description="Password">
             <f:password />
         </f:entry>
-	</f:rowSet>
+    </f:rowSet>
 </j:jelly>

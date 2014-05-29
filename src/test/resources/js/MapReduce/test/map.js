@@ -1,1 +1,3 @@
-function() { alert('test map'); }
+function() {
+    alert('test map');
+}

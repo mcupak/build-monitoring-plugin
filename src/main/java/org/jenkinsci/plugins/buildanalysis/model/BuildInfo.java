@@ -9,95 +9,94 @@ import java.util.Map;
 
 /**
  * Information about one single build
- * 
+ *
  * @author vjuranek
  *
  */
 public class BuildInfo {
-    
+
     private String id;
-    
+
     /**
      * Build number
      */
     private int number;
-    
+
     /**
      * Build name
      */
     private String name;
-    
+
     /**
      * Type of the job (clas name of job - e.g. freestyle, matrix etc.)
      */
     private String className;
-    
+
     /**
      * JDK required by this build
      */
     private String jdkName;
-    
+
     /**
      * Label required by this build
      */
     private String label;
-    
+
     /**
      * Time when the build was scheduled (i.e. put in the queue)
      */
     private Date scheduledTime;
-    
+
     /**
-     * Time when the build was actually started 
+     * Time when the build was actually started
      */
     private Date startedTime;
-    
+
     /**
      * Time when the build finished
      */
     private Date finishedTime;
-    
+
     /**
      * Result of the build (success, unstable, fail)
      */
     private Result result;
-    
+
     /**
      * Name of the slave where the build run
      */
     private String buildOn;
-    
+
     /**
      * Who/what started the build
      */
     private List<Cause> triggerCauses;
-    
+
     /**
      * Parameters the build was started with
      */
-    private Map<String,String> parameters;
-    
-    public BuildInfo(String name, int number){
+    private Map<String, String> parameters;
+
+    public BuildInfo(String name, int number) {
         this.name = name;
         this.number = number;
     }
-    
-    public BuildInfo(int number, String name, Date scheduledTime, Date startedTime){
+
+    public BuildInfo(int number, String name, Date scheduledTime, Date startedTime) {
         this.number = number;
         this.name = name;
         this.scheduledTime = scheduledTime;
         this.startedTime = startedTime;
     }
-    
-    
+
     public String getId() {
-    	return id;
+        return id;
     }
-    
+
     public void setId(String id) {
-    	this.id = id;
+        this.id = id;
     }
-    
+
     public int getNumber() {
         return number;
     }
@@ -105,11 +104,11 @@ public class BuildInfo {
     public String getName() {
         return name;
     }
-    
+
     public String getJdkName() {
         return jdkName;
     }
-    
+
     public String getClassName() {
         return className;
     }
@@ -178,14 +177,12 @@ public class BuildInfo {
         this.triggerCauses = triggerCauses;
     }
 
-    public Map<String,String> getParameters() {
+    public Map<String, String> getParameters() {
         return parameters;
     }
 
-    public void setParameters(Map<String,String> parameters) {
+    public void setParameters(Map<String, String> parameters) {
         this.parameters = parameters;
     }
 
-    
-    
 }

@@ -1,12 +1,12 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
 
-<l:side-panel>
-    <l:tasks>
-    	<l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back to Dashboard}" />
-    	<l:task icon="plugin/build-analysis/img/x-office-presentation.png" href="${rootURL}/plugin/build-analysis/globalStats" title="${%Global statistics}" />
-        <l:task icon="images/24x24/setting.png" href="${rootURL}/plugin/build-analysis/manage" title="${%Manage plugin}" />
-        <l:task icon="images/24x24/setting.png" href="${rootURL}/plugin/build-analysis/find" title="${%Queries}" />  
-    </l:tasks>
-</l:side-panel>
+    <l:side-panel>
+        <l:tasks>
+            <l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back to Dashboard}" />
+            <l:task icon="plugin/build-analysis/img/x-office-presentation.png" href="${rootURL}/plugin/build-analysis/globalStats" title="${%Global statistics}" />
+            <l:task icon="images/24x24/setting.png" href="${rootURL}/plugin/build-analysis/manage" title="${%Manage plugin}" />
+            <l:task icon="images/24x24/setting.png" href="${rootURL}/plugin/build-analysis/find" title="${%Queries}" />  
+        </l:tasks>
+    </l:side-panel>
 
 </j:jelly>

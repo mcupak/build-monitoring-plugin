@@ -8,12 +8,12 @@ import java.util.Set;
 
 public class LabelUtils {
 
-	public static List<String> getLableNames(Set<? extends Label> labels) {
-		List<String> lList = new ArrayList<String>();
-		for(Label l : labels) {
-			lList.add(l.getExpression());
-		}
-		return lList;
-	}
-	
+    public static List<String> getLableNames(Set<? extends Label> labels) {
+        List<String> lList = new ArrayList<String>();
+        for (Label l : labels) {
+            lList.add(l.getExpression());
+        }
+        return lList;
+    }
+
 }

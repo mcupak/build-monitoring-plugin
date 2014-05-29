@@ -11,12 +11,17 @@ import com.mongodb.DBObject;
 public interface BuildDAO extends MonitorDAO {
 
     public void create(BuildInfo build);
+
     public void updateOnStarted(BuildInfo build);
+
     public void updateOnFinalized(BuildInfo build);
+
     public void getBuild(String jobName, int number);
+
     public void getBuilds(String jobName);
+
     public List<DBObject> dbQuery(String queryString);
-    
+
     public JSONArray getBuildTypes();
-    
+
 }

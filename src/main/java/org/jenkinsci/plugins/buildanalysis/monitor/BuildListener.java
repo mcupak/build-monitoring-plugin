@@ -16,46 +16,45 @@ import org.jenkinsci.plugins.buildanalysis.utils.BuildUtils;
 import org.jenkinsci.plugins.buildanalysis.utils.MonitorUtils;
 
 @Extension
-public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Monitor {
-	
+public class BuildListener extends RunListener<AbstractBuild<?, ?>> implements Monitor {
+
     private BuildDAO buildDAO;
     private MonitorStatus status;
-    
+
     public BuildListener() {
-       init(); 
+        init();
     }
-    
-    public void onStarted(AbstractBuild<?,?> build, TaskListener listener) {
-        if(this.buildDAO == null &&  status == MonitorStatus.RUNNING) {
+
+    public void onStarted(AbstractBuild<?, ?> build, TaskListener listener) {
+        if (this.buildDAO == null && status == MonitorStatus.RUNNING) {
             init();  // retry to create DAO
-            if(status != MonitorStatus.RUNNING) {
+            if (status != MonitorStatus.RUNNING) {
                 LOGGER.warning("Disabling Build listener monitor, check other log recored for details");
                 disable();
                 status = MonitorStatus.FAILED;
                 return;
             }
         }
-            
-        
+
         System.out.println("Build monitor called!");
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getJobName(build), build.number);
         buildInfo.setClassName(build.getParent().getClass().getName());
         buildInfo.setStartedTime(build.getTime());
         buildInfo.setJdkName(BuildUtils.getJdkName(build));
-        buildInfo.setLabel(((AbstractProject<?,?>)build.getParent()).getAssignedLabelString());
+        buildInfo.setLabel(((AbstractProject<?, ?>) build.getParent()).getAssignedLabelString());
         buildInfo.setBuildOn(BuildUtils.getBuildOn(build));
         buildInfo.setTriggerCauses(build.getCauses());
         buildInfo.setParameters(BuildUtils.getParameters(build));
-        
+
         try {
             buildDAO.updateOnStarted(buildInfo);
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.warning("Cannot update a build info record: " + e.getMessage());
         }
     }
-    
-    public void onFinalized(AbstractBuild<?,?> build) {
-        if(this.buildDAO == null) {
+
+    public void onFinalized(AbstractBuild<?, ?> build) {
+        if (this.buildDAO == null) {
             LOGGER.warning("Disabling Build listener monitor, check other log recored for details");
             disable();
             return;
@@ -63,27 +62,27 @@ public class BuildListener extends RunListener<AbstractBuild<?,?>> implements Mo
         BuildInfo buildInfo = new BuildInfo(BuildUtils.getJobName(build), build.number);
         buildInfo.setFinishedTime(new Date(System.currentTimeMillis()));
         buildInfo.setResult(build.getResult());
-        
+
         try {
             buildDAO.updateOnFinalized(buildInfo);
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.warning("Cannot update a build info record: " + e.getMessage());
         }
     }
-    
+
     public void enable() {
         MonitorUtils.enable(this, all());
     }
-    
+
     public void disable() {
         MonitorUtils.disable(this, all());
     }
-    
+
     private void init() {
         try {
             this.buildDAO = MonitorUtils.getDaoFactory().getBuildDAO();
             this.status = MonitorStatus.RUNNING;
-        } catch(Exception e) {
+        } catch (Exception e) {
             this.buildDAO = null;
             this.status = MonitorStatus.FAILED;
         }

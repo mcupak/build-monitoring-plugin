@@ -1,1 +1,3 @@
-function() { alert('test reduce'); }
+function() {
+    alert('test reduce');
+}

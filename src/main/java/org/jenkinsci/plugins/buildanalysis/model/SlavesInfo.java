@@ -5,38 +5,36 @@ import java.util.List;
 
 /**
  * Statistics data for all slaves
- * 
+ *
  * @author vjuranek
  *
  */
 public class SlavesInfo {
 
     /**
-     * Time when the data are collected 
+     * Time when the data are collected
      */
-	private final Date timestamp;
-	
-	/**
-	 * All slaves available in give time
-	 */
-	private List<SlaveInfo> slaves;
-	
-	public SlavesInfo(Date timestamp) {
-		this.timestamp = timestamp;
-	}
+    private final Date timestamp;
 
-	public List<SlaveInfo> getSlaves() {
-		return slaves;
-	}
+    /**
+     * All slaves available in give time
+     */
+    private List<SlaveInfo> slaves;
 
-	public void setSlaves(List<SlaveInfo> slaves) {
-		this.slaves = slaves;
-	}
+    public SlavesInfo(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 
-	public Date getTimestamp() {
-		return timestamp;
-	}
-	
-	
-	
+    public List<SlaveInfo> getSlaves() {
+        return slaves;
+    }
+
+    public void setSlaves(List<SlaveInfo> slaves) {
+        this.slaves = slaves;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
 }
