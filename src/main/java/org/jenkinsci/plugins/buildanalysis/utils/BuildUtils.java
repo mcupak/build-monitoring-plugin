@@ -56,9 +56,13 @@ public class BuildUtils {
             EnvVars env = new EnvVars();
             param.buildEnvVars(build, env);
             Entry<String, String> e = env.firstEntry();
-            //paramMap.put(param.getName(), env.expand("${" + param.getName() + "}"));
-            paramMap.put(e.getKey(), e.getValue());
-
+            if (e == null) {
+                // empty env as a result of custom parameter value not overriding buildEnvVars
+                // lets store at least what we can from param (toString())
+                paramMap.put(param.getName(), param.toString());
+            } else {
+                paramMap.put(e.getKey(), e.getValue());
+            }
         }
         return paramMap;
     }
