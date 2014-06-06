@@ -10,7 +10,7 @@ projects += vals[i]["projects"];
         slaves += vals[i]["slaves"];
         offline += vals[i]["offline"];
         idle += vals[i]["idle"];
-}
+        }
 
 var date = k["year"] + "-" + (k["month"] + 1) + "-" + k["day"] + " 0:00AM";
         var avgProjects = projects / vals.length;
@@ -19,4 +19,4 @@ var date = k["year"] + "-" + (k["month"] + 1) + "-" + k["day"] + " 0:00AM";
         var avgOffline = offline / vals.length;
         var avgIdle = idle / vals.length;
         return {date: date, projects: avgProjects, builds: avgBuilds, slaves: avgSlaves, offline: avgOffline, idle: avgIdle};
-        }
+}

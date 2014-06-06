@@ -6,8 +6,12 @@ import org.junit.Test;
 
 public class MapReduceUtilsTest {
 
-    final String MAP_FUNCTION = "function() { alert('test map'); }";
-    final String REDUCE_FUNCTION = "function() { alert('test reduce'); }";
+    final String MAP_FUNCTION = "function() {\n"
+            + "    alert('test map');\n"
+            + "}";
+    final String REDUCE_FUNCTION = "function() {\n"
+            + "    alert('test reduce');\n"
+            + "}";
 
     @Test
     public void getMapReduce() {
