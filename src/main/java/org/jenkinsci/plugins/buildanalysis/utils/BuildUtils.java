@@ -8,6 +8,7 @@ import hudson.model.Cause;
 import hudson.model.JDK;
 import hudson.model.ParameterValue;
 import hudson.model.ParametersAction;
+import hudson.model.PasswordParameterValue;
 import hudson.model.Result;
 
 import java.util.HashMap;
@@ -17,6 +18,42 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class BuildUtils {
+
+    private static final class StringPair {
+
+        String key;
+        String value;
+
+        public StringPair() {
+        }
+
+        public StringPair(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return key + "=" + value;
+        }
+
+    }
 
     public static final String MATRIX_SEPARATOR = "::";
 
@@ -45,6 +82,29 @@ public class BuildUtils {
         return buildOn;
     }
 
+    private static StringPair getParamEntry(AbstractBuild<?, ?> build, ParameterValue param) {
+        String key = "";
+        String value = "";
+        EnvVars env = new EnvVars();
+        param.buildEnvVars(build, env);
+        Entry<String, String> e = env.firstEntry();
+        if (e == null) {
+            // empty env as a result of custom parameter value not overriding buildEnvVars
+            // lets store at least what we can from param (toString())
+            key = param.getName();
+            value = param.toString();
+        } else {
+            key = e.getKey();
+            if (param.getClass().isAssignableFrom(PasswordParameterValue.class)) {
+                value = ((PasswordParameterValue) param).getValue().getEncryptedValue();
+            } else {
+                value = e.getValue();
+            }
+        }
+
+        return new StringPair(key, value);
+    }
+
     public static Map<String, String> getParameters(AbstractBuild<?, ?> build) {
         ParametersAction paramAction = build.getAction(hudson.model.ParametersAction.class);
         if (paramAction == null || paramAction.getParameters() == null) {
@@ -52,17 +112,8 @@ public class BuildUtils {
         }
         Map<String, String> paramMap = new HashMap<String, String>();
         for (ParameterValue param : paramAction.getParameters()) {
-            //TODO any better way how to get param value?
-            EnvVars env = new EnvVars();
-            param.buildEnvVars(build, env);
-            Entry<String, String> e = env.firstEntry();
-            if (e == null) {
-                // empty env as a result of custom parameter value not overriding buildEnvVars
-                // lets store at least what we can from param (toString())
-                paramMap.put(param.getName(), param.toString());
-            } else {
-                paramMap.put(e.getKey(), e.getValue());
-            }
+            StringPair pair = getParamEntry(build, param);
+            paramMap.put(pair.getKey(), pair.getValue());
         }
         return paramMap;
     }
